@@ -1,0 +1,22 @@
+{
+  "appId": "com.taif-ML.xing-scraper",
+  "files": ["dist-electron", "dist-react"],
+  "icon": "./xing-icon.png",
+  "asar": "false",
+  "extraResources": [
+   {
+    "from":  "dist-electron/preload.cjs",
+    "to": "app/dist-electron/preload.cjs"
+   }
+  ],
+  "mac": {
+    "target": "dmg"
+  },
+  "linux": {
+    "target": "AppImage",
+    "category": "Utility"
+  },
+  "win": {
+    "target": ["portable", "msi"]
+  }
+}
