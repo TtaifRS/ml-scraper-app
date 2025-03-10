@@ -3,8 +3,9 @@ import path from 'path'
 import dotenv from 'dotenv'
 import { isDev } from './utils.js'
 import { getPreloadPath } from './pathResolver.js'
-import { scrapeJobLinks } from './services/xing/scrapeJobLinks.js'
+// import { scrapeJobLinks } from './services/xing/scrapeJobLinks.js'
 import connectDB from './config/database.js'
+import scrapeJobAndUpdateDB from './services/xing/scrapeJobDesc.js'
 
 dotenv.config()
 
@@ -26,9 +27,10 @@ app.on("ready", async () => {
   }else{
     mainWindow.loadFile(path.join(app.getAppPath() + '/dist-react/index.html'))
   }
-  ipcMain.on('search', async(event: Electron.IpcMainEvent, searchTerm: string, searchLimit: number)=> {
+  ipcMain.on('search', async()=> {
 
-    await scrapeJobLinks(event, searchTerm, searchLimit)
+    // await scrapeJobLinks(event, searchTerm)
+    await scrapeJobAndUpdateDB()
   })
  }catch(error){
   console.log( error)

@@ -18,8 +18,13 @@
     "dist:linux": "npm run transpile:electron && npm run build && electron-builder --linux --x64"
   },
   "dependencies": {
+    "axios": "^1.8.2",
+    "cheerio": "^1.0.0",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
+    "https-proxy-agent": "^7.0.6",
     "mongoose": "^8.12.1",
+    "p-limit": "^6.2.0",
     "puppeteer": "^24.4.0",
     "puppeteer-core": "^24.3.1",
     "puppeteer-real-browser": "^1.4.2",

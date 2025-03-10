@@ -1,5 +1,10 @@
 import type { Page } from "rebrowser-puppeteer-core";
+import * as cheerio from 'cheerio'
 import { blockUnnecessaryResources, createRealBrowser } from '../puppteerConnection.js'
+import { parseRelativeDate } from '../../helpers/parseRelativeData.js';
+import { Job } from '../../models/job.model.js';
+
+const SEARCH_LIMIT = 100
 
 const scrollPageToBottom = async (page: Page) => {
   await page.evaluate(() => {
@@ -8,9 +13,7 @@ const scrollPageToBottom = async (page: Page) => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 };
 
-
-
-export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: string, searchLimit: number = 1000 ) => {
+export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: string ) => {
   const {browser, page} = await createRealBrowser()
   try{
 
@@ -21,24 +24,31 @@ export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: st
 
    
     let previousHeight = 0;
-  const hrefs = new Set();
+  const jobData = new Map<string, Date>()
 
-  console.log(searchLimit)
-  while (hrefs.size <= searchLimit) {
-    const newHrefs = await page.evaluate(() => {
-      const links = Array.from(document.querySelectorAll<HTMLAnchorElement>("ul > li article a"));
-      return links.map(link => link.href).filter(Boolean);
-    });
 
-    newHrefs.forEach(href => hrefs.add(href));
+  while (jobData.size <= SEARCH_LIMIT) {
+    const html = await page.content()
+    const $ = cheerio.load(html)
+    const newResults = $('ul > li article').map((i, article) => {
+      const hrefText = $(article).find('a').attr('href')
+      const dateText = $(article).find('p[class*="job-teaser-list-item-styles__Date"]').text().trim()
+      const date = parseRelativeDate(dateText)
+      const href = `https://www.xing.com${hrefText}`
+      return {href, date}
+    }).get().filter(item => item.href)
 
+    newResults.forEach(({href, date}) => {
+      if(href) jobData.set(href, date)
+    })
     await scrollPageToBottom(page);
-    console.log(`Current number of jobs ${hrefs.size}`)
+    console.log(`Current number of jobs ${jobData.size}`)
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const newHeight = await page.evaluate(() => document.body.scrollHeight);
 
+    
     if (newHeight === previousHeight) {
-      if(hrefs.size >= (searchLimit - 20)){
+      if(jobData.size >= (SEARCH_LIMIT - 20)){
         break;
       }else{
         continue
@@ -48,18 +58,31 @@ export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: st
     previousHeight = newHeight;
   }
 
-  const uniqueLinks = Array.from(hrefs)
-  return event.reply('search-results', uniqueLinks)
+  const results = Array.from(jobData, ([href, date]) => ({href, date}))
+
+  const saveJobs = results.map(({href, date}) => 
+    Job.findOneAndUpdate(
+      {link: href},
+      {
+        $set: {
+          link: href,
+          postingDate: date,
+          description: 'To be scraped'
+        }
+      },
+      {upsert: true, new: true}
+    )
+  )
+
+  await Promise.all(saveJobs)
+  return event.reply('search-results', results)
   
   }catch(error){
     console.error("puppeteer error:", error)
     if(error instanceof Error){
       return event.reply('search-error', error.message)
-    }
-    
+    } 
   }finally{
     await browser.close()
   }
-  
-
 }

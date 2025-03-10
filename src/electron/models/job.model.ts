@@ -4,6 +4,8 @@ export interface IJob extends Document{
   title: string,
   link: string,
   companyName: string,
+  companyUrl?: string | null,
+  companyService?: string | null,
   company?: Types.ObjectId | null,
   location?: string | null,
   jobVerified: boolean,
@@ -17,11 +19,10 @@ export interface IJob extends Document{
 }
 
 
-
 const JobSchema = new Schema<IJob>({
   title: {
     type: String,
-    required: true,
+    required: false,
   },
   link: {
     type: String,
@@ -58,6 +59,14 @@ const JobSchema = new Schema<IJob>({
     type: String,
     default: null
   },
+  companyUrl: {
+    type: String,
+    default: null
+  },
+  companyService: {
+    type: String,
+    required: false
+  },
   company: {
     type: Schema.Types.ObjectId,
     ref: 'Company',
@@ -70,4 +79,4 @@ const JobSchema = new Schema<IJob>({
 }, { timestamps: true })
 
 
-export const JobModel = model<IJob>('Job', JobSchema)
+export const Job = model<IJob>('Job', JobSchema)

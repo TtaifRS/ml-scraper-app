@@ -4,7 +4,9 @@ declare global {
 	interface Window {
 		electronAPI: {
 			sendSearch: (searchTerm: string) => void
-			onSearchResults: (callback: (links: string[]) => void) => () => void
+			onSearchResults: (
+				callback: (results: { href: string; date: Date }[]) => void
+			) => () => void
 			onSearchError: (callback: (error: string) => void) => () => void
 		}
 	}
@@ -13,16 +15,16 @@ declare global {
 const SearchComponent = () => {
 	const [searchTerm, setSearchTerm] = useState<string>('')
 
-	const [results, setResults] = useState<string[]>()
+	const [results, setResults] = useState<{ href: string; date: Date }[]>([])
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [error, setError] = useState<string>('')
 
 	useEffect(() => {
 		const { onSearchResults, onSearchError } = window.electronAPI
 
-		const unsubscribeResults = onSearchResults((links) => {
+		const unsubscribeResults = onSearchResults((results) => {
 			console.log('recieving results')
-			setResults(links)
+			setResults(results)
 			setIsLoading(false)
 		})
 
@@ -63,9 +65,10 @@ const SearchComponent = () => {
 			{error && <p>{error}</p>}
 			{results && (
 				<>
-					{results.map((link, index) => (
+					{results.map((result, index) => (
 						<ul key={index}>
-							<li>{link}</li>
+							<li>{result.href}</li>
+							<li>{new Date(result.date).toLocaleDateString()}</li>
 						</ul>
 					))}
 				</>
