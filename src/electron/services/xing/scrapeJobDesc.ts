@@ -109,7 +109,7 @@ const scrapeJobWithRetries = async(url: string) => {
   return await withRetries(() => scrapeJobDesc(url))
 }
 
-export default async function scrapeJobAndUpdateDB() {
+export default async function scrapeJobAndUpdateDB(event: Electron.IpcMainEvent) {
   try{
     const jobs = await getJobsToScrape()
 
@@ -121,6 +121,7 @@ export default async function scrapeJobAndUpdateDB() {
     console.log(jobs)
 
     const limit = pLimit(CONCURRENCY_LIMIT)
+    const results: JobData[] = []
 
     await Promise.all(
       jobs.map((job, index) => limit(async() => {
@@ -133,8 +134,8 @@ export default async function scrapeJobAndUpdateDB() {
             {_id: job._id},
             {$set: jobData}
           )
-
-          console.log(`Updated job in database: ${job.title}`)
+          results.push(jobData)
+          console.log(`Updated job in database: ${jobData.title}`)
         }
 
         await randomWait(500, 1000)
@@ -142,10 +143,15 @@ export default async function scrapeJobAndUpdateDB() {
     )
     
     console.log('All jobs processed succesfully')
+    return event.reply('search-results', results)
 
   }catch(error){
-    const errorMessage = error instanceof Error ? error.message : error
-    console.error(`Error during scraping: ${errorMessage}`)
+    if(error instanceof Error){
+      console.error("Scraping error:", error.message)
+      return event.reply('search-error', error.message)
+    }else{
+      console.error('Scraping error', error)
+    } 
     throw Error
   }
 } 

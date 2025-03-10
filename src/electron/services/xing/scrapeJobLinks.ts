@@ -13,7 +13,7 @@ const scrollPageToBottom = async (page: Page) => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 };
 
-export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: string ) => {
+export const scrapeJobLinks = async( searchTerm: string ) => {
   const {browser, page} = await createRealBrowser()
   try{
 
@@ -75,13 +75,11 @@ export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: st
   )
 
   await Promise.all(saveJobs)
-  return event.reply('search-results', results)
+  
   
   }catch(error){
-    console.error("puppeteer error:", error)
-    if(error instanceof Error){
-      return event.reply('search-error', error.message)
-    } 
+    const errorMessage = error instanceof Error ? error.message : error
+    console.error(`Error during scraping: ${errorMessage}`)
   }finally{
     await browser.close()
   }
