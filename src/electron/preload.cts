@@ -3,6 +3,7 @@ const electron = require("electron")
 interface ElectronAPI {
   sendSearch: (searchTerm: string) => void,
   scrapeJobs: () => void,
+  scrapeCompanies: () => void,
   onSearchResults: (callback: (links: string[]) => void) => () => void,
   onSearchError: (callback: (error: string) => void) => () => void
 }
@@ -10,6 +11,7 @@ interface ElectronAPI {
 electron.contextBridge.exposeInMainWorld("electronAPI", {
   sendSearch: (searchTerm: string) => electron.ipcRenderer.send('search', searchTerm),
   scrapeJobs:() => electron.ipcRenderer.send('scrape-jobs'),
+  scrapeCompanies: () => electron.ipcRenderer.send('scrape-companies'),
   onSearchResults: (callback: (links: string[]) => void) =>  {
     const listener = (_event: Electron.IpcRendererEvent, links: string[]) => callback(links)
     electron.ipcRenderer.on('search-results', listener)

@@ -118,8 +118,6 @@ export default async function scrapeJobAndUpdateDB(event: Electron.IpcMainEvent)
       return
     }
 
-    console.log(jobs)
-
     const limit = pLimit(CONCURRENCY_LIMIT)
     const results: JobData[] = []
 

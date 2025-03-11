@@ -6,6 +6,7 @@ import { getPreloadPath } from './pathResolver.js'
 import { scrapeJobLinks } from './services/xing/scrapeJobLinks.js'
 import connectDB from './config/database.js'
 import scrapeJobAndUpdateDB from './services/xing/scrapeJobDesc.js'
+import scrapeCompnayAndUpdateDB from './services/xing/scrapeCompanyDetails.js'
 
 dotenv.config()
 
@@ -27,15 +28,20 @@ app.on("ready", async () => {
   }else{
     mainWindow.loadFile(path.join(app.getAppPath() + '/dist-react/index.html'))
   }
-  ipcMain.on('search', async(event: Electron.IpcMainEvent, searchTerm: string) => {
+  ipcMain.on('search', async(_event: Electron.IpcMainEvent, searchTerm: string) => {
     await scrapeJobLinks(searchTerm)
   })
 
   ipcMain.on('scrape-jobs', async(event: Electron.IpcMainEvent) => {
     await scrapeJobAndUpdateDB(event)
   })
+  
+  ipcMain.on('scrape-companies', async() => {
+    await scrapeCompnayAndUpdateDB()
+  })
  }catch(error){
-  console.log( error)
+  const errorMessage = error instanceof Error ? error.message : error
+  console.log(errorMessage)
  }
 })
 

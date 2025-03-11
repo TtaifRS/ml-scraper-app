@@ -6,7 +6,7 @@ import UserAgent from 'user-agents';
 
 export const createRealBrowser = async () => {
   const defaultOptions = {
-    headless: false,
+    headless: true,
     args: [
       '--start-maximized',
       '--lang=en-US,en',

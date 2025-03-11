@@ -18,10 +18,12 @@
     "dist:linux": "npm run transpile:electron && npm run build && electron-builder --linux --x64"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.0.12",
     "axios": "^1.8.2",
     "cheerio": "^1.0.0",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
+    "fast-csv": "^5.0.2",
     "https-proxy-agent": "^7.0.6",
     "mongoose": "^8.12.1",
     "p-limit": "^6.2.0",
@@ -30,6 +32,7 @@
     "puppeteer-real-browser": "^1.4.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.12",
     "user-agents": "^1.1.470"
   },
   "devDependencies": {

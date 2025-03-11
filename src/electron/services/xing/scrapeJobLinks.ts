@@ -30,7 +30,7 @@ export const scrapeJobLinks = async( searchTerm: string ) => {
   while (jobData.size <= SEARCH_LIMIT) {
     const html = await page.content()
     const $ = cheerio.load(html)
-    const newResults = $('ul > li article').map((i, article) => {
+    const newResults = $('ul > li article').map((_i, article) => {
       const hrefText = $(article).find('a').attr('href')
       const dateText = $(article).find('p[class*="job-teaser-list-item-styles__Date"]').text().trim()
       const date = parseRelativeDate(dateText)

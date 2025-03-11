@@ -3,7 +3,7 @@ import { randomWait } from './randomWait.js'
 const RETRY_LIMIT = 15
 const DELAY_BETWEEN_REQUEST = [500, 1000]
 
-export const withRetries = async <T>(fn: () => Promise<T>, retries: number = RETRY_LIMIT): Promise<T> => {
+export const withRetries = async <T>(fn: () => Promise<T>, retries: number = RETRY_LIMIT): Promise<T | null> => {
   for(let attempt = 0; attempt < retries; attempt++){
     try{
       return await fn()
@@ -14,5 +14,5 @@ export const withRetries = async <T>(fn: () => Promise<T>, retries: number = RET
     await randomWait(DELAY_BETWEEN_REQUEST[0], DELAY_BETWEEN_REQUEST[1])
   }
 
-  throw new Error('Max retries reached')
+  return null
 }
