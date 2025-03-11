@@ -13,7 +13,7 @@ const scrollPageToBottom = async (page: Page) => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 };
 
-export const scrapeJobLinks = async( searchTerm: string ) => {
+export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: string ) => {
   const {browser, page} = await createRealBrowser()
   try{
 
@@ -75,11 +75,13 @@ export const scrapeJobLinks = async( searchTerm: string ) => {
   )
 
   await Promise.all(saveJobs)
-  
+  const searchReply = `Total ${jobData.size} job links scraped from ${searchTerm}`
+  return event.reply('search-result', searchReply)
   
   }catch(error){
-    const errorMessage = error instanceof Error ? error.message : error
+    const errorMessage = error instanceof Error ? error.message : 'Something went wrong'
     console.error(`Error during scraping: ${errorMessage}`)
+    return event.reply('search-error', errorMessage)
   }finally{
     await browser.close()
   }

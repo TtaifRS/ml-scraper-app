@@ -114,7 +114,7 @@ const getUniqueCompanyUrls = async(): Promise<string[]> => {
   return Array.from(uniqueUrls)
 }
 
-export default async function scrapeCompnayAndUpdateDB() {
+export default async function scrapeCompnayAndUpdateDB(event: Electron.IpcMainEvent) {
   try {
     const companyUrls = await getUniqueCompanyUrls()
 
@@ -154,8 +154,15 @@ export default async function scrapeCompnayAndUpdateDB() {
   )
 
   console.log('All companies processed')
+  return event.reply('scrape-companies-result', `Total company details scraped ${results.length}`)
 
   }catch(error){
-    console.log(error)
+    if(error instanceof Error){
+      console.error("Scraping error:", error.message)
+      return event.reply('scrape-companies-error', error.message)
+    }else{
+      console.error('Scraping error', error)
+    } 
+    throw Error
   }
 }

@@ -28,16 +28,16 @@ app.on("ready", async () => {
   }else{
     mainWindow.loadFile(path.join(app.getAppPath() + '/dist-react/index.html'))
   }
-  ipcMain.on('search', async(_event: Electron.IpcMainEvent, searchTerm: string) => {
-    await scrapeJobLinks(searchTerm)
+  ipcMain.on('search', async(event: Electron.IpcMainEvent, searchTerm: string) => {
+    await scrapeJobLinks(event, searchTerm)
   })
 
   ipcMain.on('scrape-jobs', async(event: Electron.IpcMainEvent) => {
     await scrapeJobAndUpdateDB(event)
   })
   
-  ipcMain.on('scrape-companies', async() => {
-    await scrapeCompnayAndUpdateDB()
+  ipcMain.on('scrape-companies', async(event: Electron.IpcMainEvent) => {
+    await scrapeCompnayAndUpdateDB(event)
   })
  }catch(error){
   const errorMessage = error instanceof Error ? error.message : error

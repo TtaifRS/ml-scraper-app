@@ -141,12 +141,12 @@ export default async function scrapeJobAndUpdateDB(event: Electron.IpcMainEvent)
     )
     
     console.log('All jobs processed succesfully')
-    return event.reply('search-results', results)
+    return event.reply('scrape-jobs-result', `Total jobs scraped ${results.length}`)
 
   }catch(error){
     if(error instanceof Error){
       console.error("Scraping error:", error.message)
-      return event.reply('search-error', error.message)
+      return event.reply('scrape-jobs-error', error.message)
     }else{
       console.error('Scraping error', error)
     } 
