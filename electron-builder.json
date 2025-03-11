@@ -1,8 +1,8 @@
 {
   "appId": "com.taif-ML.xing-scraper",
+  "productName": "Xing-scraper",
   "files": ["dist-electron", "dist-react"],
   "icon": "./xing-icon.png",
-  "asar": "false",
   "extraResources": [
    {
     "from":  "dist-electron/preload.cjs",
@@ -10,7 +10,7 @@
    },
    {
     "from": ".env",
-    "to": "app/.env"
+    "to": ""
    }
   ],
   "mac": {
@@ -22,5 +22,8 @@
   },
   "win": {
     "target": ["portable", "msi"]
-  }
+  },
+  "buildVersion": "1.0.0",
+  "asar": "false",
+  "compression": "normal"
 }

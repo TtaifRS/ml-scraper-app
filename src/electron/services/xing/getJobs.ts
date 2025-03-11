@@ -42,10 +42,10 @@ export async function getJobsWithCompanyURLandNullCompany():Promise<IJob[]> {
 }
 
 
-export default async function getJobswithComapnayInfo() {
+export  async function getJobswithComapnayInfo(): Promise<IJob[]> {
   try{
 
-    const jobs = await Job.find({}).populate('company').lean()
+    const jobs = await Job.find({}).populate<{company: IJob['company']}>('company').lean()
     if(jobs.length === 0){
       console.log('No Jobs found')
       return []

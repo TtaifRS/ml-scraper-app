@@ -13,7 +13,11 @@ declare global {
 			scrapeCompanies: () => void
       onScrapeCompanyResult: (callback: (result: string) => void) => () => void
 			onScrapeCompanyError: (callback: (error: string) => void) => () => void
-		
+
+      
+      downloadCsv: () => void,
+      onDownloadSuccess: (callback: (result: string) => void) => () => void
+      onDownloadError: (callback: (result: string) => void) => () => void
 		}
 	}
 }

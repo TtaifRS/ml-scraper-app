@@ -7,8 +7,11 @@ import { scrapeJobLinks } from './services/xing/scrapeJobLinks.js'
 import connectDB from './config/database.js'
 import scrapeJobAndUpdateDB from './services/xing/scrapeJobDesc.js'
 import scrapeCompnayAndUpdateDB from './services/xing/scrapeCompanyDetails.js'
+import exportJobsToCSV from './services/xing/createCsv.js'
 
-dotenv.config()
+dotenv.config({
+  path: isDev() ? '.env' : path.join(process.resourcesPath, '.env')
+})
 
 const uri: string = process.env.MONGO_URI || ''
 
@@ -38,6 +41,10 @@ app.on("ready", async () => {
   
   ipcMain.on('scrape-companies', async(event: Electron.IpcMainEvent) => {
     await scrapeCompnayAndUpdateDB(event)
+  })
+
+  ipcMain.on('download-csv', async(event: Electron.IpcMainEvent) => {
+    await exportJobsToCSV(event)
   })
  }catch(error){
   const errorMessage = error instanceof Error ? error.message : error

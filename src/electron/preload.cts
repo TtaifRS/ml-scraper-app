@@ -13,6 +13,9 @@ interface ElectronAPI {
   onScrapeCompanyResult: (callback: (result: string) => void) => () => void,
   onScrapeCompanyError: (callback: (error: string) => void) => () => void
 
+  downloadCsv: () => void,
+  onDownloadSuccess: (callback: (result: string) => void) => () => void
+  onDownloadError: (callback: (result: string) => void) => () => void
 }
 
 electron.contextBridge.exposeInMainWorld("electronAPI", {
@@ -52,5 +55,18 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
     return () => electron.ipcRenderer.removeListener('scrape-companies-error', listener)
   }, 
   
+
+  downloadCsv: () => electron.ipcRenderer.send('download-csv'),
+  onDownloadSuccess: (callback: (result: string) => void) => {
+    const listner = (_event: Electron.IpcRendererEvent, result: string) => callback(result)
+    electron.ipcRenderer.on('download-csv-result', listner)
+    return () => electron.ipcRenderer.removeListener('download-csv-result', listner)
+  },
+  onDownloadError: (callback: (result: string) => void) => {
+    const listner = (_event: Electron.IpcRenderer, result: string) => callback(result)
+    electron.ipcRenderer.on('download-csv-error', listner)
+    return () => electron.ipcRenderer.removeListener('download-csv-error', listner)
+  }
+
  
 } as ElectronAPI)

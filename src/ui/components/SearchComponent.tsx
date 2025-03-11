@@ -1,3 +1,4 @@
+import CreateCsv from './createCsv'
 import ScrapeCompanies from './ScrapeCompanies'
 import ScrapeJobs from './ScrapeJobs'
 import SearchJobs from './SearchJobs'
@@ -8,6 +9,7 @@ const SearchComponent = () => {
 			<SearchJobs />
 			<ScrapeJobs />
 			<ScrapeCompanies />
+			<CreateCsv />
 		</div>
 	)
 }

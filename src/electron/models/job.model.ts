@@ -1,12 +1,12 @@
 import {Schema, model, Document, Types} from 'mongoose'
-
+import { ICompany } from './company.model.js'
 export interface IJob extends Document{
   title: string,
   link: string,
   companyName: string,
   companyUrl?: string | null,
   companyService?: string | null,
-  company?: Types.ObjectId | null,
+  company?: Types.ObjectId | ICompany | null,
   location?: string | null,
   jobVerified: boolean,
   jobType?: string | null,
