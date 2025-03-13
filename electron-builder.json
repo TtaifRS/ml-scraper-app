@@ -14,6 +14,7 @@
    }
   ],
   "mac": {
+    "icon": "./xing-icon.icns",
     "target": "dmg"
   },
   "linux": {
