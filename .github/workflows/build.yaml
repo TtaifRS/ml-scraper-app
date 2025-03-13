@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  build-mac:
     runs-on: macos-latest
     steps:
       - name: Checkout code
@@ -27,8 +27,36 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Upload artifacts
+      - name: Upload mac artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Xing-scraper
+          name: Xing-scraper-mac
           path: dist/*.dmg
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22.14.0'
+
+      - name: Set up GH_TOKEN
+        run: echo "GH_TOKEN = ${{ secrets.GH_TOKEN }}" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the app for macOS
+        run: npm run dist:win
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Upload windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Xing-scraper-windows
+          path: dist/*.exe
