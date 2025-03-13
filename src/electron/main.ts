@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path'
 import dotenv from 'dotenv'
+import dotenvExpand from 'dotenv-expand'
 import { isDev } from './utils.js'
 import { getPreloadPath } from './pathResolver.js'
 import { scrapeJobLinks } from './services/xing/scrapeJobLinks.js'
@@ -8,17 +9,12 @@ import connectDB from './config/database.js'
 import scrapeJobAndUpdateDB from './services/xing/scrapeJobDesc.js'
 import scrapeCompnayAndUpdateDB from './services/xing/scrapeCompanyDetails.js'
 import exportJobsToCSV from './services/xing/createCsv.js'
-import { cleanPhoneNumbers } from './services/xing/getJobs.js'
-
 
 const envPath = isDev() ? '.env' : path.join(process.resourcesPath, '.env')
-
-
-
-dotenv.config({
+dotenvExpand.expand(dotenv.config({
   path: envPath
 })
-
+)
 const uri: string = process.env.MONGO_URI || ""
 
 let mainWindow  
@@ -26,7 +22,7 @@ app.on("ready", async () => {
  try{
   await connectDB(uri)
 
-  await cleanPhoneNumbers()
+
 
   mainWindow = new BrowserWindow({
     width: 1200,

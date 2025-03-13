@@ -1,0 +1,29 @@
+name: Build Electron App fro macOS
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22.14.0'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the app for macOS
+        run: npm run dist:mac
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Xing-scraper
+          path: dist/*.dmg
