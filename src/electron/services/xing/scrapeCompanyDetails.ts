@@ -87,8 +87,8 @@ const scrapeCompanyDetails = async(url:string) => {
 
     companyData.fullAddress = companyLocationAdressCardEl.find('p[class*="location-styles__Address-sc"]') ? companyLocationAdressCardEl.find('p[class*="location-styles__Address-sc"]').text() : ""
 
-    companyData.phoneNumber = companyLocationAdressCardEl.find('a[class*="location-styles__PhoneButton-sc"]').attr('href') || ""
-    companyData.email = companyLocationAdressCardEl.find('div[class="allContactsWrapper"] > div').eq(1).find('a').attr('href') || ""
+    companyData.phoneNumber = companyLocationAdressCardEl.find('a[class*="location-styles__PhoneButton-sc"]').attr('href')?.replace(/^tel:/, '') || "" 
+    companyData.email = companyLocationAdressCardEl.find('div[class="allContactsWrapper"] > div').eq(1).find('a').attr('href')?.replace(/^mailto:/, '') || ""
 
     companyData.website = companyLocationAdressCardEl.find('div[class="allContactsWrapper"] > div').eq(2).find('a').attr('href') || ""
     

@@ -72,7 +72,14 @@ const companySchema = new Schema<ICompany>({
   },
   phoneNumber: {
     type: String,
-    required: false
+    required: false,
+    set: function(value: string) {
+      if (typeof value === 'string' && value.startsWith("%")){
+        return value.substring(1)
+      }
+
+      return value
+    }
   },
   email: {
     type: String,
@@ -83,6 +90,9 @@ const companySchema = new Schema<ICompany>({
     required: false
   }
 }, { timestamps: true })
+
+
+
 
 const Company = model<ICompany>('Company', companySchema)
 

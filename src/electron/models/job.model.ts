@@ -3,6 +3,7 @@ import { ICompany } from './company.model.js'
 export interface IJob extends Document{
   title: string,
   link: string,
+  category: string,
   companyName: string,
   companyUrl?: string | null,
   companyService?: string | null,
@@ -28,6 +29,10 @@ const JobSchema = new Schema<IJob>({
     type: String,
     required: true,
     unique: true
+  },
+  category: {
+    type: String,
+    required: true
   },
   location: {
     type: String,

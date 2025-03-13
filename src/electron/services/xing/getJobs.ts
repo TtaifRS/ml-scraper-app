@@ -1,3 +1,4 @@
+import Company from '../../models/company.model.js';
 import { Job, IJob } from '../../models/job.model.js';
 
 export async function getJobsToScrape(): Promise<IJob[]> {
@@ -56,5 +57,26 @@ export  async function getJobswithComapnayInfo(): Promise<IJob[]> {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occured' 
     console.error(`Error fetching jobs: ${errorMessage}`)
     throw error
+  }
+}
+
+export async function cleanPhoneNumbers(){
+  try{
+    await Company.updateMany(
+      {phoneNumber: {$regex: /^%/}},
+      [
+        {
+          $set: {
+            phoneNumber: {
+              $substr: ['$phoneNumber', 1, -1]
+            }
+          }
+        }
+      ]
+    )
+
+    console.log('Telephone numbers cleaned succesfully')
+  }catch(error){
+    console.log(error)
   }
 }

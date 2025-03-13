@@ -17,7 +17,12 @@ export const createRealBrowser = async () => {
     ],
     fingerprint: true,
     turnstile: true,
-  
+    proxy: {
+          host: process.env.PROXY_HOST || '' ,
+          port: process.env.PORT ? parseInt(process.env.PORT, 10) : 0 ,
+          username: process.env.PROXY_LOGIN || '' ,
+          password: process.env.PROXY_PASSWORD || '' 
+        },
     userAgent: new UserAgent({ deviceCategory: 'desktop' }).toString()
   }
   try {

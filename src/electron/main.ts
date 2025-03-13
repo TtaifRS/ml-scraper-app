@@ -8,17 +8,26 @@ import connectDB from './config/database.js'
 import scrapeJobAndUpdateDB from './services/xing/scrapeJobDesc.js'
 import scrapeCompnayAndUpdateDB from './services/xing/scrapeCompanyDetails.js'
 import exportJobsToCSV from './services/xing/createCsv.js'
+import { cleanPhoneNumbers } from './services/xing/getJobs.js'
+
+
+const envPath = isDev() ? '.env' : path.join(process.resourcesPath, '.env')
+
+
 
 dotenv.config({
-  path: isDev() ? '.env' : path.join(process.resourcesPath, '.env')
+  path: envPath
 })
 
-const uri: string = process.env.MONGO_URI || ''
+const uri: string = process.env.MONGO_URI || ""
 
 let mainWindow  
 app.on("ready", async () => {
  try{
   await connectDB(uri)
+
+  await cleanPhoneNumbers()
+
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -29,6 +38,7 @@ app.on("ready", async () => {
   if(isDev()){
     mainWindow.loadURL('http://localhost:5123')
   }else{
+   
     mainWindow.loadFile(path.join(app.getAppPath() + '/dist-react/index.html'))
   }
   ipcMain.on('search', async(event: Electron.IpcMainEvent, searchTerm: string) => {
