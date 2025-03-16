@@ -32,7 +32,7 @@
         "arch": ["ia32", "x64"]
       }
     ],
-    "artifaceName": "Xing-scraper-${arch}.${ext}"
+    "artifactName": "Xing-scraper-${arch}.${ext}"
    
   },
   "buildVersion": "1.0.0",
