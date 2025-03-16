@@ -22,7 +22,8 @@
     "category": "Utility"
   },
   "win": {
-    "target": ["portable", "msi"]
+    "target": ["portable", "msi"],
+    "arch": ["ia32", "x64"]
   },
   "buildVersion": "1.0.0",
   "asar": "false",

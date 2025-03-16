@@ -16,6 +16,9 @@ jobs:
         with:
           node-version: '22.14.0'
 
+      - name: Create .env file
+        run: echo "${{ secrets.ENV_FILE_CONTENT }}" > .env
+
       - name: Set up GH_TOKEN
         run: echo "GH_TOKEN = ${{ secrets.GH_TOKEN }}" >> $GITHUB_ENV
 
@@ -44,6 +47,9 @@ jobs:
         with:
           node-version: '22.14.0'
 
+      - name: Create .env file
+        run: echo "${{ secrets.ENV_FILE_CONTENT }}" > .env
+
       - name: Set up GH_TOKEN
         run: echo "GH_TOKEN = ${{ secrets.GH_TOKEN }}" >> $GITHUB_ENV
 
@@ -55,8 +61,14 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Upload windows artifacts
+      - name: Upload windows 32-bit artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Xing-scraper-windows
-          path: dist/*.exe
+          path: dist/*ia32.exe
+
+      - name: Upload windows 64-bit artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Xing-scraper-windows
+          path: dist/*x64.exe
