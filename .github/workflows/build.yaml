@@ -61,12 +61,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Upload windows 32-bit artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: Xing-scraper-windows
-          path: dist/*ia32.exe
-
       - name: Upload windows 64-bit artifacts
         uses: actions/upload-artifact@v4
         with:

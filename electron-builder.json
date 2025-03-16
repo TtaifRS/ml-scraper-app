@@ -25,11 +25,11 @@
     "target":[
       {
         "target": "portable",
-        "arch": ["ia32", "x64"]
+        "arch": ["x64"]
       },
       {
         "target": "msi",
-        "arch": ["ia32", "x64"]
+        "arch": ["x64"]
       }
     ],
     "artifactName": "Xing-scraper-${arch}.${ext}"

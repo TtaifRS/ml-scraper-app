@@ -52,9 +52,19 @@ app.on("ready", async () => {
   ipcMain.on('download-csv', async(event: Electron.IpcMainEvent) => {
     await exportJobsToCSV(event)
   })
+
+  mainWindow.on('closed', () => {
+    mainWindow = null
+    app.quit()
+  })
  }catch(error){
   const errorMessage = error instanceof Error ? error.message : error
   console.log(errorMessage)
  }
+})
+
+app.on('window-all-closed', () => {
+  mainWindow = null
+  app.quit()
 })
 
