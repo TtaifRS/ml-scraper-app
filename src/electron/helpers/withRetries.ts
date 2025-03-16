@@ -1,6 +1,6 @@
 import { randomWait } from './randomWait.js'
 
-const RETRY_LIMIT = 15
+const RETRY_LIMIT = 5
 const DELAY_BETWEEN_REQUEST = [500, 1000]
 
 export const withRetries = async <T>(fn: () => Promise<T>, retries: number = RETRY_LIMIT): Promise<T | null> => {

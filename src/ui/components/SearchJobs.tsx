@@ -3,14 +3,22 @@ import { useEffect, useState } from 'react'
 const SearchJobs = () => {
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [result, setResult] = useState<string>('')
+	const [progressMessages, setProgressMessages] = useState<string[]>([])
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [error, setError] = useState<string>('')
 
 	useEffect(() => {
-		const { onSearchResult, onSearchError } = window.electronAPI
+		const { onSearchResult, onSearchProgress, onSearchError } =
+			window.electronAPI
 
-		const unsubscribeResults = onSearchResult((result) => {
-			setResult(result)
+		const unsubscribeProgress = onSearchProgress((message) => {
+			setProgressMessages((prev) => {
+				return [...prev.slice(0, 2), ...prev.slice(2).concat(message).slice(-5)]
+			})
+		})
+
+		const unsubscribeResult = onSearchResult((res) => {
+			setResult(res)
 			setIsLoading(false)
 		})
 
@@ -20,7 +28,8 @@ const SearchJobs = () => {
 		})
 
 		return () => {
-			unsubscribeResults()
+			unsubscribeProgress()
+			unsubscribeResult()
 			unsubscribeError()
 		}
 	}, [])
@@ -31,13 +40,15 @@ const SearchJobs = () => {
 		setIsLoading(true)
 		setError('')
 		setResult('')
+		setProgressMessages([])
 
 		window.electronAPI.sendSearch(searchTerm)
+		console.log(result)
 	}
 
 	return (
 		<>
-			<div className="flex w-full flex-row justify-between gap-[8px] items-center">
+			<div className="flex w-full flex-row justify-between gap-[8px] items-center overflow-hidden">
 				<input
 					type="text"
 					value={searchTerm}
@@ -54,15 +65,29 @@ const SearchJobs = () => {
 					{isLoading ? 'Searching' : 'Search'}
 				</button>
 			</div>
-			<div>
-				{isLoading ? (
-					<p className="text-yellow-300">Scraping job links. Please wait...</p>
-				) : result.length ? (
+			<div className="bg-black w-full rounded-lg shadow-lg overflow-hidden p-4">
+				<p className="text-emerald-700">ML-XING-APP Search Console</p>
+				{isLoading && (
+					<div>
+						{progressMessages.length > 0 ? (
+							progressMessages.map((msg, index) => (
+								<p key={index} className="text-indigo-400">
+									{msg}
+								</p>
+							))
+						) : (
+							<p className="text-yellow-300">
+								Scraping job links. Please wait...
+							</p>
+						)}
+					</div>
+				)}
+				{!isLoading && result ? (
 					<p className="text-green-300">{result}</p>
 				) : null}
-			</div>
 
-			{error && <p className="text-red-300">{error}</p>}
+				{error && <p className="text-red-300">{error}</p>}
+			</div>
 		</>
 	)
 }

@@ -10,6 +10,7 @@ import { randomWait } from '../../helpers/randomWait.js'
 import { getJobsWithCompanyURLandNullCompany } from './getJobs.js'
 import Company from '../../models/company.model.js'
 import { Job } from '../../models/job.model.js'
+import { getCurrentime } from '../../helpers/getCurrentTime.js'
 
 
 const CONCURRENCY_LIMIT = 25
@@ -129,6 +130,7 @@ export default async function scrapeCompnayAndUpdateDB(event: Electron.IpcMainEv
     await Promise.all(
       companyUrls.map((companyUrl, index) => limit(async() => {
         console.log(`Scraping company ${index + 1}/ ${companyUrls.length}`)
+        event.reply('scrape-companies-progress', `[${getCurrentime()}] Scraping company ${index + 1}/ ${companyUrls.length} `)
 
         const exisitingCompany = await Company.findOne({profileUrl: companyUrl})
 
@@ -143,10 +145,13 @@ export default async function scrapeCompnayAndUpdateDB(event: Electron.IpcMainEv
             await Job.updateMany({companyUrl}, {company: newCompany._id})
 
             console.log(`Stored company in database: ${companyData.name}`)
+            event.reply('scrape-companies-progress', `[${getCurrentime()}] Stored company in database: ${companyData.name}`)
           }
           
         }else{
+          await Job.updateMany({ companyUrl }, { company: exisitingCompany._id });
           console.log(`Company already exists: ${exisitingCompany.name}`)
+          event.reply('scrape-companies-progress', `[${getCurrentime()}] Company already exists: ${exisitingCompany.name}`)
         }
         await randomWait(500, 1000)
       })
@@ -154,7 +159,7 @@ export default async function scrapeCompnayAndUpdateDB(event: Electron.IpcMainEv
   )
 
   console.log('All companies processed')
-  return event.reply('scrape-companies-result', `Total company details scraped ${results.length}`)
+  event.reply('scrape-companies-result', `[${getCurrentime()}] Total company details scraped ${results.length}`)
 
   }catch(error){
     if(error instanceof Error){

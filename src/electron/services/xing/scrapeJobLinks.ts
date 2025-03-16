@@ -3,6 +3,7 @@ import * as cheerio from 'cheerio'
 import { blockUnnecessaryResources, createRealBrowser } from '../puppteerConnection.js'
 import { parseRelativeDate } from '../../helpers/parseRelativeData.js';
 import { Job } from '../../models/job.model.js';
+import { getCurrentime } from '../../helpers/getCurrentTime.js';
 
 
 
@@ -20,24 +21,30 @@ export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: st
     await blockUnnecessaryResources(page)
     page.setDefaultNavigationTimeout(0);
     await page.goto(`https://www.xing.com/jobs/search?keywords=${searchTerm}&sort=date&employmentType=FULL_TIME.ef2fe9&country=de.02516e`, {waitUntil: 'networkidle0'})
+
+    event.reply('search-progress', `[${getCurrentime()}] Starting to scrape jobs for ${searchTerm}`)
+
     const jobCountText = await page.$eval('h1[data-xds="Headline"]', el => el.textContent || '');
     const jobCount = parseInt(jobCountText.replace(/\D/g, ''), 10) || 0; 
 
     const SEARCH_LIMIT = Math.min(jobCount, 1000); 
     console.log(`SEARCH_LIMIT set to: ${SEARCH_LIMIT}`);
+    
+    event.reply('search-progress', `[${getCurrentime()}] Search Limit set to ${SEARCH_LIMIT}`)
 
   
 
    
     let previousHeight = 0;
-  const jobData = new Map<string, Date>()
+   
+    const jobData = new Map<string, Date>()
 
  
   while (jobData.size <= SEARCH_LIMIT) {
     const html = await page.content()
     const $ = cheerio.load(html)
-    const newResults = $('ol > li article').map((_i, article) => {
-      const hrefText = $(article).find('a').attr('href')
+    const newResults = $('ol > li a article').map((_i, article) => {
+      const hrefText = $(article).closest('a').attr('href')
       const dateText = $(article).find('p[class*="job-teaser-list-item-styles__Date"]').text().trim()
       const date = parseRelativeDate(dateText)
       const href = `https://www.xing.com${hrefText}`
@@ -49,10 +56,13 @@ export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: st
     newResults.forEach(({href, date}) => {
       if(href) jobData.set(href, date)
     })
+
+    event.reply('search-progress', `[${getCurrentime()}] Scraped ${jobData.size} jobs so far`)
     await scrollPageToBottom(page);
   
     console.log(`Current number of jobs ${jobData.size}`)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    
     const newHeight = await page.evaluate(() => document.body.scrollHeight);
 
     
@@ -85,8 +95,8 @@ export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: st
   )
 
   await Promise.all(saveJobs)
-  const searchReply = `Total ${saveJobs.length}/${jobData.size} job links scraped from ${searchTerm}`
-  return event.reply('search-result', searchReply)
+  const searchReply = `[${getCurrentime()}] Total ${jobData.size} job links scraped from ${searchTerm}`
+   event.reply('search-result', searchReply)
   
   }catch(error){
     const errorMessage = error instanceof Error ? error.message : 'Something went wrong'

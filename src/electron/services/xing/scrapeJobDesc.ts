@@ -8,6 +8,7 @@ import { Job } from '../../models/job.model.js'
 import { withRetries } from '../../helpers/withRetries.js'
 import { getJobsToScrape } from './getJobs.js'
 import { randomWait } from '../../helpers/randomWait.js'
+import { getCurrentime } from '../../helpers/getCurrentTime.js'
 
 
 const CONCURRENCY_LIMIT = 25
@@ -124,7 +125,7 @@ export default async function scrapeJobAndUpdateDB(event: Electron.IpcMainEvent)
     await Promise.all(
       jobs.map((job, index) => limit(async() => {
         console.log(`Scraping job ${index + 1}/ ${jobs.length}`)
-        
+        event.reply('scrape-job-progress', `[${getCurrentime()}] Scraping job ${index + 1}/ ${jobs.length}`)
         const jobData = await scrapeJobWithRetries(job.link)
 
         if(jobData && jobData.title){
@@ -141,7 +142,7 @@ export default async function scrapeJobAndUpdateDB(event: Electron.IpcMainEvent)
     )
     
     console.log('All jobs processed succesfully')
-    return event.reply('scrape-jobs-result', `Total jobs scraped ${results.length}`)
+    event.reply('scrape-jobs-result', `[${getCurrentime()}] Total jobs scraped ${results.length}`)
 
   }catch(error){
     if(error instanceof Error){

@@ -2,11 +2,21 @@ import { useEffect, useState } from 'react'
 
 const ScrapeJobs = () => {
 	const [result, setResult] = useState<string>('')
+	const [progressMessages, setProgressMessages] = useState<string[]>([])
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [error, setError] = useState<string>('')
 
 	useEffect(() => {
-		const { onScrapeJobResult, onScrapeJobError } = window.electronAPI
+		const { onScrapeJobResult, onSracpreJobProgress, onScrapeJobError } =
+			window.electronAPI
+		const unsubscribeProgress = onSracpreJobProgress((message) => {
+			setProgressMessages((prev) => {
+				const updated = [...prev, message]
+				const sliced = updated.slice(-10)
+
+				return sliced
+			})
+		})
 
 		const unsubscribeResults = onScrapeJobResult((result) => {
 			setResult(result)
@@ -20,6 +30,7 @@ const ScrapeJobs = () => {
 
 		return () => {
 			unsubscribeResults()
+			unsubscribeProgress()
 			unsubscribeError()
 		}
 	}, [])
@@ -28,6 +39,7 @@ const ScrapeJobs = () => {
 		setIsLoading(true)
 		setError('')
 		setResult('')
+		setProgressMessages([])
 		window.electronAPI.scrapeJobs()
 	}
 
@@ -42,17 +54,29 @@ const ScrapeJobs = () => {
 					Scrape Jobs
 				</button>
 			</div>
-			<div>
-				{isLoading ? (
-					<p className="text-yellow-300">
-						Scraping job details. Please wait...
-					</p>
-				) : result.length ? (
+			<div className="bg-black w-full rounded-lg shadow-lg overflow-hidden p-4">
+				<p className="text-emerald-700">ML-XING-APP Job Scrape Console</p>
+				{isLoading && (
+					<div>
+						{progressMessages.length > 0 ? (
+							progressMessages.map((msg, index) => (
+								<p key={index} className="text-indigo-400">
+									{msg}
+								</p>
+							))
+						) : (
+							<p className="text-yellow-300">
+								Scraping job details. Please wait...
+							</p>
+						)}
+					</div>
+				)}
+				{!isLoading && result ? (
 					<p className="text-green-300">{result}</p>
 				) : null}
-			</div>
 
-			{error && <p className="text-red-300">{error}</p>}
+				{error && <p className="text-red-300">{error}</p>}
+			</div>
 		</>
 	)
 }

@@ -15,6 +15,6 @@ const PROXY_PASSWORD = process.env.PROXY_PASSWORD
 const PROXY_HOST = process.env.PROXY_HOST 
 const PROXY_PORT = process.env.PROXY_PORT
 
-console.log(PROXY_HOST)
+
 
 export const httpsAgent = new HttpsProxyAgent(`http://${PROXY_LOGIN}:${PROXY_PASSWORD}@${PROXY_HOST}:${PROXY_PORT}/`)

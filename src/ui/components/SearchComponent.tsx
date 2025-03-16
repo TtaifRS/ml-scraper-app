@@ -5,7 +5,7 @@ import SearchJobs from './SearchJobs'
 
 const SearchComponent = () => {
 	return (
-		<div className="flex flex-col gap-[16px] bg-stone-500 w-screen h-full items-start justify-center px-[120px]">
+		<div className="flex flex-col gap-[16px] bg-stone-500 w-screen h-full items-start justify-center px-[120px] overflow-hidden">
 			<SearchJobs />
 			<ScrapeJobs />
 			<ScrapeCompanies />
