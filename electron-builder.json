@@ -22,8 +22,18 @@
     "category": "Utility"
   },
   "win": {
-    "target": ["portable", "msi"],
-    "arch": ["ia32", "x64"]
+    "target":[
+      {
+        "target": "portable",
+        "arch": ["ia32", "x64"]
+      },
+      {
+        "target": "msi",
+        "arch": ["ia32", "x64"]
+      }
+    ],
+    "artifaceName": "Xing-scraper-${arch}.${ext}"
+   
   },
   "buildVersion": "1.0.0",
   "asar": "false",
