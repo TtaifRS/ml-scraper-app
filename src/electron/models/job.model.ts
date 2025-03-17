@@ -19,7 +19,6 @@ export interface IJob extends Document{
   updatedAt: Date
 }
 
-
 const JobSchema = new Schema<IJob>({
   title: {
     type: String,

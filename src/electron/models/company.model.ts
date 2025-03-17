@@ -91,9 +91,6 @@ const companySchema = new Schema<ICompany>({
   }
 }, { timestamps: true })
 
-
-
-
 const Company = model<ICompany>('Company', companySchema)
 
 export default Company

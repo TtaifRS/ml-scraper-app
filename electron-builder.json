@@ -11,6 +11,10 @@
    {
     "from": ".env",
     "to": ".env"
+   },
+   {
+    "from": "splash.html",
+    "to": "app/dist-react/splash.html"
    }
   ],
   "mac": {
@@ -24,18 +28,32 @@
   "win": {
     "target":[
       {
-        "target": "portable",
-        "arch": ["x64"]
-      },
-      {
-        "target": "msi",
+        "target": "nsis",
         "arch": ["x64"]
       }
     ],
     "artifactName": "Xing-scraper-${arch}.${ext}"
    
   },
+  "nsis":{
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "perMachine": false,
+    "createStartMenuShortcut": true,
+    "shortcutName": "Xing Scraper",
+    "deleteAppDataOnUninstall": true,
+    "installerIcon": "./xing-icon.ico",
+    "uninstallerIcon": "./xing-icon.ico",
+    "uninstallDisplayName": "Xing Scraper Uninstall"
+
+  },
   "buildVersion": "1.0.0",
-  "asar": "false",
+  "asar": false,
+  "asarUnpack": [
+    "**/*.node",
+    "dist-electron",
+    "dist-react",
+    ".env"
+  ],
   "compression": "normal"
 }
