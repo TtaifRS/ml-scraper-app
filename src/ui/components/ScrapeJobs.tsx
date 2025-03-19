@@ -7,9 +7,9 @@ const ScrapeJobs = () => {
 	const [error, setError] = useState<string>('')
 
 	useEffect(() => {
-		const { onScrapeJobResult, onSracpreJobProgress, onScrapeJobError } =
+		const { onScrapeJobResult, onScrapeJobProgress, onScrapeJobError } =
 			window.electronAPI
-		const unsubscribeProgress = onSracpreJobProgress((message) => {
+		const unsubscribeProgress = onScrapeJobProgress((message) => {
 			setProgressMessages((prev) => {
 				const updated = [...prev, message]
 				const sliced = updated.slice(-10)
@@ -60,7 +60,7 @@ const ScrapeJobs = () => {
 					<div>
 						{progressMessages.length > 0 ? (
 							progressMessages.map((msg, index) => (
-								<p key={index} className="text-indigo-400">
+								<p key={index} className="text-indigo-400 text-sm font-light">
 									{msg}
 								</p>
 							))

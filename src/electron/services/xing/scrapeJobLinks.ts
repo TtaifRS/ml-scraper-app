@@ -11,10 +11,12 @@ const scrollPageToBottom = async (page: Page) => {
   await page.evaluate(() => {
     window.scrollTo(0, document.body.scrollHeight);
   });
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1500));
 };
 
-export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: string ) => {
+
+
+export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: string,  ) => {
   const {browser, page} = await createRealBrowser()
   try{
 
@@ -30,17 +32,16 @@ export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: st
     const SEARCH_LIMIT = Math.min(jobCount, 1000); 
     console.log(`SEARCH_LIMIT set to: ${SEARCH_LIMIT}`);
     
-    event.reply('search-progress', `[${getCurrentime()}] Search Limit set to ${SEARCH_LIMIT}`)
-
-  
-
-   
+    event.reply('search-progress', `[${getCurrentime()}] Search Limit set to ${SEARCH_LIMIT} for ${searchTerm}`)
+ 
     let previousHeight = 0;
+    let stagentCount = 0
    
     const jobData = new Map<string, Date>()
 
  
   while (jobData.size <= SEARCH_LIMIT) {
+    
     const html = await page.content()
     const $ = cheerio.load(html)
     const newResults = $('ol > li a article').map((_i, article) => {
@@ -57,25 +58,28 @@ export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: st
       if(href) jobData.set(href, date)
     })
 
-    event.reply('search-progress', `[${getCurrentime()}] Scraped ${jobData.size} jobs so far`)
+    event.reply('search-progress', `[${getCurrentime()}] Scraped ${jobData.size} jobs so far for ${searchTerm} out of ${SEARCH_LIMIT}`)
     await scrollPageToBottom(page);
   
     console.log(`Current number of jobs ${jobData.size}`)
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     
     const newHeight = await page.evaluate(() => document.body.scrollHeight);
 
-    
     if (newHeight === previousHeight) {
-      if(jobData.size >= (SEARCH_LIMIT - 20)){
+      stagentCount++
+      if(jobData.size >= (SEARCH_LIMIT - 20) || stagentCount > 5){
         break;
       }else{
         continue
       }
-      
+    }else{
+      stagentCount = 0
     }
     previousHeight = newHeight;
   }
+
+  
 
   const results = Array.from(jobData, ([href, date]) => ({href, date}))
 

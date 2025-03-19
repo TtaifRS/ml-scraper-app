@@ -64,7 +64,7 @@ const ScrapeCompanies = () => {
 					<div>
 						{progressMessages.length > 0 ? (
 							progressMessages.map((msg, index) => (
-								<p key={index} className="text-indigo-400">
+								<p key={index} className="text-indigo-400 text-sm font-light">
 									{msg}
 								</p>
 							))

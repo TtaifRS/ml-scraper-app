@@ -16,6 +16,7 @@ import connectDB from './config/database.js'
 import scrapeJobAndUpdateDB from './services/xing/scrapeJobDesc.js'
 import scrapeCompnayAndUpdateDB from './services/xing/scrapeCompanyDetails.js'
 import exportJobsToCSV from './services/xing/createCsv.js'
+import { ScrapeMultipleJobLinks } from './services/xing/ScrapeMultipleJobLinks.js'
 
 
 
@@ -97,9 +98,21 @@ app.whenReady().then(async () => {
 
 
 
+
 ipcMain.on('search', async(event: Electron.IpcMainEvent, searchTerm: string) => {
   try{
-    await scrapeJobLinks(event, searchTerm)
+    
+    
+    await scrapeJobLinks(event, searchTerm, )
+  }catch(error){
+    console.error(error)
+  }
+})
+
+
+ipcMain.on('search-multiple', async(event: Electron.IpcMainEvent, searchTerms: string[]) => {
+  try{
+    await ScrapeMultipleJobLinks(event, searchTerms)
   }catch(error){
     console.error(error)
   }

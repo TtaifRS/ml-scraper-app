@@ -125,7 +125,7 @@ export default async function scrapeJobAndUpdateDB(event: Electron.IpcMainEvent)
     await Promise.all(
       jobs.map((job, index) => limit(async() => {
         console.log(`Scraping job ${index + 1}/ ${jobs.length}`)
-        event.reply('scrape-job-progress', `[${getCurrentime()}] Scraping job ${index + 1}/ ${jobs.length}`)
+        event.reply('scrape-jobs-progress', `[${getCurrentime()}] Scraping job ${index + 1}/ ${jobs.length}`)
         const jobData = await scrapeJobWithRetries(job.link)
 
         if(jobData && jobData.title){
