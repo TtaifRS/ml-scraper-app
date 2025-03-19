@@ -1,6 +1,6 @@
-import type { Page } from "rebrowser-puppeteer-core";
+import type { Browser, Page } from "rebrowser-puppeteer-core";
 import * as cheerio from 'cheerio'
-import { blockUnnecessaryResources, createRealBrowser } from '../puppteerConnection.js'
+import { blockUnnecessaryResources } from '../puppteerConnection.js'
 import { parseRelativeDate } from '../../helpers/parseRelativeData.js';
 import { Job } from '../../models/job.model.js';
 import { getCurrentime } from '../../helpers/getCurrentTime.js';
@@ -16,8 +16,8 @@ const scrollPageToBottom = async (page: Page) => {
 
 
 
-export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: string,  ) => {
-  const {browser, page} = await createRealBrowser()
+export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: string, browser: Browser, page: Page  ) => {
+  
   try{
 
     await blockUnnecessaryResources(page)
@@ -105,7 +105,7 @@ export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: st
   }catch(error){
     const errorMessage = error instanceof Error ? error.message : 'Something went wrong'
     console.error(`Error during scraping: ${errorMessage}`)
-    return event.reply('search-error', errorMessage)
+    event.reply('search-error', `[${getCurrentime()}] Searched Canceled`)
   }finally{
     await browser.close()
   }

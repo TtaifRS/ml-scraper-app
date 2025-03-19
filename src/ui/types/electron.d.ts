@@ -4,6 +4,7 @@ declare global {
 	interface Window {
 		electronAPI: {
 			sendSearch: (searchTerm: string) => void
+      sendCancel: () => void
       onSearchProgress: (callback: (msg: string) => void) => Unsubscribe
       onSearchResult: (callback: (result: string) => void) => Unsubscribe
 			onSearchError: (callback: (error: string) => void) => Unsubscribe

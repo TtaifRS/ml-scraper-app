@@ -18,6 +18,10 @@ const SearchJobs: React.FC<SearchJobsProps> = ({
 		window.electronAPI.sendSearch(searchTerm)
 	}
 
+	const handleCancel = () => {
+		window.electronAPI.sendCancel()
+	}
+
 	return (
 		<div className="w-full mx-auto p-4 ">
 			<div className="flex w-full flex-row justify-between gap-20  items-end overflow-hidden">
@@ -28,13 +32,20 @@ const SearchJobs: React.FC<SearchJobsProps> = ({
 					onChange={(e) => setSearchTerm(e.target.value)}
 				/>
 				{isDisabled ? (
-					<div>
+					<div className="flex gap-2 items-center">
 						<Button
 							disabled={isDisabled}
 							className="mt-4 cursor-pointer  text-white bg-gray-700 hover:bg-gray-900"
 						>
 							<Loader2 className="animate-spin" />
 							Please wait
+						</Button>
+						<Button
+							className="mt-4 cursor-pointer text-white"
+							variant="destructive"
+							onClick={handleCancel}
+						>
+							Cancel Search
 						</Button>
 					</div>
 				) : (

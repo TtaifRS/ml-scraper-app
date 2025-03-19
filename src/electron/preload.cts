@@ -4,7 +4,7 @@ const {ipcRenderer} = electron
 
 interface ElectronAPI {
   sendSearch: (searchTerm: string) => void,
- 
+  sendCancel: () => void,
   onSearchProgress: (callback: (msg: string) => void) => Unsubscribe,
   onSearchResult: (callback: (result: string) => void) => Unsubscribe,
   onSearchError: (callback: (error: string) => void) => Unsubscribe
@@ -42,6 +42,7 @@ const createIpcHandler = <T,>(channel: string) => (callback: (payload: T) => voi
 const electronAPI : ElectronAPI = {
   //Search API 
   sendSearch: (searchTerm) => ipcRenderer.send('search', searchTerm),
+  sendCancel: () => ipcRenderer.send('search-cancel'),
   onSearchProgress: createIpcHandler('search-progress'),
   onSearchResult: createIpcHandler('search-result'),
   onSearchError: createIpcHandler('search-error'),
@@ -74,88 +75,3 @@ const electronAPI : ElectronAPI = {
 
 electron.contextBridge.exposeInMainWorld("electronAPI", electronAPI)
 
-
-// electron.contextBridge.exposeInMainWorld("electronAPI", {
-//   sendSearch: (searchTerm: string) => electron.ipcRenderer.send('search', searchTerm),
-//   onSearchProgress: (callback: (msg : string) => void) => {
-//     const listener = (_event: Electron.IpcRendererEvent, msg: string) => callback(msg)
-//     electron.ipcRenderer.on('search-progress', listener)
-//     return() => electron.ipcRenderer.removeListener('search-progress', listener)
-//   },
-//   onSearchResult: (callback: (result: string) => void) =>  {
-//     const listener = (_event: Electron.IpcRendererEvent, result: string) => callback(result)
-//     electron.ipcRenderer.on('search-result', listener)
-//     return () => electron.ipcRenderer.removeListener('search-result', listener)
-//   },
-//   onSearchError: (callback: (error: string) => void) => {
-//     const listener = (_event: Electron.IpcRendererEvent, error: string) => callback(error)
-//     electron.ipcRenderer.on('search-error', listener)
-//     return () => electron.ipcRenderer.removeListener('search-error', listener)
-//   }, 
-
-//   scrapeJobs:() => electron.ipcRenderer.send('scrape-jobs'),
-//   onSracpreJobProgress: (callback: (msg : string) => void) => {
-//     const listener = (_event: Electron.IpcRendererEvent, msg: string) => callback(msg)
-//     electron.ipcRenderer.on('scrape-job-progress', listener)
-//     return() => electron.ipcRenderer.removeListener('search-progress', listener)
-//   },
-//   onScrapeJobResult: (callback: (result: string) => void) =>  {
-//     const listener = (_event: Electron.IpcRendererEvent, result: string) => callback(result)
-//     electron.ipcRenderer.on('scrape-jobs-result', listener)
-//     return () => electron.ipcRenderer.removeListener('scrape-jobs-result', listener)
-//   },
-//   onScrapeJobError: (callback: (error: string) => void) => {
-//     const listener = (_event: Electron.IpcRendererEvent, error: string) => callback(error)
-//     electron.ipcRenderer.on('scrape-jobs-error', listener)
-//     return () => electron.ipcRenderer.removeListener('scrape-jobs-error', listener)
-//   }, 
-  
-//   scrapeCompanies: () => electron.ipcRenderer.send('scrape-companies'),
-//   onSracpreCompanyProgress: (callback: (msg : string) => void) => {
-//     const listener = (_event: Electron.IpcRendererEvent, msg: string) => callback(msg)
-//     electron.ipcRenderer.on('scrape-companies-progress', listener)
-//     return() => electron.ipcRenderer.removeListener('search-progress', listener)
-//   },
-//   onScrapeCompanyResult: (callback: (result: string) => void) =>  {
-//     const listener = (_event: Electron.IpcRendererEvent, result: string) => callback(result)
-//     electron.ipcRenderer.on('scrape-companies-result', listener)
-//     return () => electron.ipcRenderer.removeListener('scrape-companies-result', listener)
-//   },
-//   onScrapeCompanyError: (callback: (error: string) => void) => {
-//     const listener = (_event: Electron.IpcRendererEvent, error: string) => callback(error)
-//     electron.ipcRenderer.on('scrape-companies-error', listener)
-//     return () => electron.ipcRenderer.removeListener('scrape-companies-error', listener)
-//   },
-  
-//   sendMultipleSearch: (searchTerms: string[]) => electron.ipcRenderer.send('search-multiple', searchTerms),
-//   onMultipleSearchProgress: (callback: (msg: string) => void) => {
-//     const listener = (_event: Electron.IpcRendererEvent, msg: string) => callback(msg)
-//     electron.ipcRenderer.on('search-multiple-progress', listener)
-//     return () => electron.ipcRenderer.removeListener('search-multiple-progress', listener)
-//   },
-//   onMultipleSearchResult: (callback: (result: string) => void) => {
-//     const listner = (_event: Electron.IpcRendererEvent, result: string) => callback(result)
-//     electron.ipcRenderer.on('search-multiple-result', listner)
-//     return () => electron.ipcRenderer.removeListener('search-multiple-result', listner)
-//   },
-//   onMultipleSearchError: (callback: (error: string) => void) => {
-//     const listener = (_event: Electron.IpcRendererEvent, error: string) => callback(error)
-//     electron.ipcRenderer.on('search-multiple-error', listener)
-//     return () => electron.ipcRenderer.removeListener('search-multiple-error', listener)
-//   },
-  
-
-//   downloadCsv: () => electron.ipcRenderer.send('download-csv'),
-//   onDownloadSuccess: (callback: (result: string) => void) => {
-//     const listner = (_event: Electron.IpcRendererEvent, result: string) => callback(result)
-//     electron.ipcRenderer.on('download-csv-result', listner)
-//     return () => electron.ipcRenderer.removeListener('download-csv-result', listner)
-//   },
-//   onDownloadError: (callback: (result: string) => void) => {
-//     const listner = (_event: Electron.IpcRenderer, result: string) => callback(result)
-//     electron.ipcRenderer.on('download-csv-error', listner)
-//     return () => electron.ipcRenderer.removeListener('download-csv-error', listner)
-//   }
-
- 
-// } as ElectronAPI)

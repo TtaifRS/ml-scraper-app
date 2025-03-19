@@ -1,5 +1,6 @@
 import { getCurrentime } from '../../helpers/getCurrentTime.js'
 import { randomWait } from '../../helpers/randomWait.js'
+import { createRealBrowser } from '../puppteerConnection.js'
 import { scrapeJobLinks } from './scrapeJobLinks.js'
 
 export const ScrapeMultipleJobLinks = async(event: Electron.IpcMainEvent, searchParams: string[], ) => {
@@ -9,7 +10,8 @@ export const ScrapeMultipleJobLinks = async(event: Electron.IpcMainEvent, search
     for(const searchParam of searchParams){
       event.reply('search-multiple-progress', `[${getCurrentime()}] Starting search for ${searchParam}`)
       console.log(`Starting search for ${searchParam}`)
-      await scrapeJobLinks(event, searchParam,)
+      const {browser, page} = await createRealBrowser()
+      await scrapeJobLinks(event, searchParam, browser, page)
       await randomWait(500, 1000)
       event.reply('search-multiple-progress', `[${getCurrentime()}] Finished Search for ${searchParam}`)
       console.log(`Finished search for ${searchParam}`)

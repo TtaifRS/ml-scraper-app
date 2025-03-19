@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path'
+import type { Browser } from "rebrowser-puppeteer-core";
 import dotenv from 'dotenv'
 import dotenvExpand from 'dotenv-expand'
 import { isDev } from './utils.js'
@@ -17,6 +18,7 @@ import scrapeJobAndUpdateDB from './services/xing/scrapeJobDesc.js'
 import scrapeCompnayAndUpdateDB from './services/xing/scrapeCompanyDetails.js'
 import exportJobsToCSV from './services/xing/createCsv.js'
 import { ScrapeMultipleJobLinks } from './services/xing/ScrapeMultipleJobLinks.js'
+import { createRealBrowser } from './services/puppteerConnection.js'
 
 
 
@@ -98,20 +100,34 @@ app.whenReady().then(async () => {
 
 
 
+let currentBrowser : Browser | null = null
 
 ipcMain.on('search', async(event: Electron.IpcMainEvent, searchTerm: string) => {
   try{
-    
-    
-    await scrapeJobLinks(event, searchTerm, )
+    const {browser, page} = await createRealBrowser()
+    currentBrowser = browser
+    await scrapeJobLinks(event, searchTerm, currentBrowser, page )
   }catch(error){
     console.error(error)
+  }finally{
+    if(currentBrowser){
+      await currentBrowser.close()
+      currentBrowser = null
+    }
+  }
+})
+
+
+ipcMain.on('search-cancel', () => {
+  if(currentBrowser){
+    currentBrowser.close()
+    currentBrowser = null
   }
 })
 
 
 ipcMain.on('search-multiple', async(event: Electron.IpcMainEvent, searchTerms: string[]) => {
-  try{
+  try{ 
     await ScrapeMultipleJobLinks(event, searchTerms)
   }catch(error){
     console.error(error)
