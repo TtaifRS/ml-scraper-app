@@ -2,14 +2,14 @@ import { getCurrentime } from '../../helpers/getCurrentTime.js'
 import { randomWait } from '../../helpers/randomWait.js'
 import { scrapeJobLinks } from './scrapeJobLinks.js'
 
-export const ScrapeMultipleJobLinks = async(event: Electron.IpcMainEvent, searchParams: string[], shouldCancel: boolean) => {
+export const ScrapeMultipleJobLinks = async(event: Electron.IpcMainEvent, searchParams: string[], ) => {
   event.reply('search-multiple-progress', `[${getCurrentime()}] Search start for ${searchParams.join(", ")}`)
   try{
     event.reply('search-multiple-progress')
     for(const searchParam of searchParams){
       event.reply('search-multiple-progress', `[${getCurrentime()}] Starting search for ${searchParam}`)
       console.log(`Starting search for ${searchParam}`)
-      await scrapeJobLinks(event, searchParam, shouldCancel)
+      await scrapeJobLinks(event, searchParam,)
       await randomWait(500, 1000)
       event.reply('search-multiple-progress', `[${getCurrentime()}] Finished Search for ${searchParam}`)
       console.log(`Finished search for ${searchParam}`)
