@@ -5,14 +5,31 @@ on:
     branches: [main]
 
 jobs:
+  check-nodeenv:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Read Node_ENV from package.json
+        id: nove_env
+        run: echo "NODE_ENV=$(node -p "require('./package.json').env.NODE_ENV")" >> $GITHUB_ENV
+
+      - name: Verify NODE_ENV
+        run: |
+          if [ "$NODE_ENV" != "production" ]; then
+            echo "NODE_ENV is not production. Skipping build."
+              exit 1
+                fi
+
   build-mac:
     runs-on: macos-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '22.14.0'
 
@@ -40,10 +57,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '22.14.0'
 

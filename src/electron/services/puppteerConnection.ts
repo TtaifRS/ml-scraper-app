@@ -13,7 +13,6 @@ export const createRealBrowser = async () => {
       '--disable-blink-features=AutomationControlled',
       '--no-sandbox',
       '--disable-setuid-sandbox',
-
     ],
     fingerprint: true,
     turnstile: true,
