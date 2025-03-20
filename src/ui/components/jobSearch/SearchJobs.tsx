@@ -35,13 +35,13 @@ const SearchJobs: React.FC<SearchJobsProps> = ({
 					<div className="flex gap-2 items-center">
 						<Button
 							disabled={isDisabled}
-							className="mt-4 cursor-pointer  text-white bg-gray-700 hover:bg-gray-900"
+							className=" cursor-pointer  text-white bg-gray-700 hover:bg-gray-900"
 						>
 							<Loader2 className="animate-spin" />
 							Please wait
 						</Button>
 						<Button
-							className="mt-4 cursor-pointer text-white"
+							className="cursor-pointer text-white"
 							variant="destructive"
 							onClick={handleCancel}
 						>

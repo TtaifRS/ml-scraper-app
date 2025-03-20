@@ -16,7 +16,7 @@ interface ElectronAPI {
   onScrapeJobError: (callback: (error: string) => void) => Unsubscribe
   
   scrapeCompanies: () => void,
-  onSracpreCompanyProgress: (callback: (msg: string) => void) => Unsubscribe,
+  onScrapeCompanyProgress: (callback: (msg: string) => void) => Unsubscribe,
   onScrapeCompanyResult: (callback: (result: string) => void) => Unsubscribe,
   onScrapeCompanyError: (callback: (error: string) => void) => Unsubscribe
 
@@ -62,7 +62,7 @@ const electronAPI : ElectronAPI = {
 
   //Company Scraping API 
   scrapeCompanies: () => ipcRenderer.send('scrape-companies'),
-  onSracpreCompanyProgress: createIpcHandler('scrape-companies-progress'),
+  onScrapeCompanyProgress: createIpcHandler('scrape-companies-progress'),
   onScrapeCompanyResult: createIpcHandler('scrape-companies-result'),
   onScrapeCompanyError: createIpcHandler('scrape-companies-error'),
 

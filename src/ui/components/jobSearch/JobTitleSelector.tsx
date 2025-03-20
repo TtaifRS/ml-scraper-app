@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { jobCategories } from '../data/jobCategories'
+import { jobCategories } from '../../data/jobCategories'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
 	Accordion,
@@ -82,7 +82,7 @@ const JobTitleSelector: React.FC<JobTitleSelectorProps> = ({
 					{isDisabled ? (
 						<Button
 							disabled={isDisabled}
-							className="mt-4 cursor-pointer text-white bg-gray-700 hover:bg-gray-900"
+							className=" cursor-pointer text-white bg-gray-700 hover:bg-gray-900"
 						>
 							<Loader2 className="animate-spin" />
 							Please wait
@@ -90,7 +90,7 @@ const JobTitleSelector: React.FC<JobTitleSelectorProps> = ({
 					) : (
 						<Button
 							onClick={handleSubmit}
-							className="mt-4 cursor-pointer text-white bg-gray-700 hover:bg-gray-900"
+							className=" cursor-pointer text-white bg-gray-700 hover:bg-gray-900"
 						>
 							Scrape Multiple Jobs
 						</Button>

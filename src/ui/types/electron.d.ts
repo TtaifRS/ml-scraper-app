@@ -17,7 +17,7 @@ declare global {
 
 
 			scrapeCompanies: () => void
-      onSracpreCompanyProgress: (callback: (msg: string) => void) => Unsubscribe
+      onScrapeCompanyProgress: (callback: (msg: string) => void) => Unsubscribe
       onScrapeCompanyResult: (callback: (result: string) => void) => Unsubscribe
 			onScrapeCompanyError: (callback: (error: string) => void) => Unsubscribe
 
