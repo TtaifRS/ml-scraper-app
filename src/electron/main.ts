@@ -1,4 +1,5 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import {autoUpdater} from 'electron-updater'
 import path from 'path'
 import type { Browser } from "rebrowser-puppeteer-core";
 import dotenv from 'dotenv'
@@ -23,10 +24,11 @@ import { createRealBrowser } from './services/puppteerConnection.js'
 
 
 const uri: string = process.env.MONGO_URI || ""
-
 let mainWindow: BrowserWindow | null = null
 let splashWindow: BrowserWindow | null = null
 
+autoUpdater.autoDownload = false
+autoUpdater.allowPrerelease = false
 
 async function createMainWindow() {
   mainWindow = new BrowserWindow({
@@ -52,6 +54,8 @@ async function createMainWindow() {
       splashWindow = null
     }
     mainWindow?.show()
+
+    autoUpdater.checkForUpdatesAndNotify()
   })
 
   
@@ -91,7 +95,7 @@ app.whenReady().then(async () => {
         console.error('Error starting the app', error instanceof Error ? error.message : error)
         app.quit()
       }
-    },3000)
+    },5000)
   }catch(error){
     console.error('Error starting the app', error instanceof Error ? error.message : error)
     app.quit()
@@ -99,6 +103,39 @@ app.whenReady().then(async () => {
 })
 
 
+
+autoUpdater.on('update-available', (info) => {
+  autoUpdater.logger?.info(`Update available: ${info}`)
+  dialog.showMessageBox({
+    type: 'info',
+    title: 'Update availble',
+    message: `A new version ${info.version} is available. Do want to download and install it now?`,
+    buttons: ['Yes', 'Later']
+  })
+  .then((result) => {
+    if(result.response === 0) {
+      autoUpdater.downloadUpdate()
+    }
+  })
+})
+
+autoUpdater.on('update-downloaded', () => {
+  dialog.showMessageBox({
+    type: 'info',
+    title: 'Update Ready',
+    message: 'The new version has been downloaded. Restart the app to apply the update',
+    buttons: ['Restart Now']
+  })
+  .then((result) => {
+    if(result.response === 0) {
+      autoUpdater.quitAndInstall()
+    }
+  })
+})
+
+autoUpdater.on('error', () => {
+  autoUpdater.logger?.error('Auto update error')
+})
 
 let currentBrowser : Browser | null = null
 

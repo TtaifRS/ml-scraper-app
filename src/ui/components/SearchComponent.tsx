@@ -16,8 +16,8 @@ const SearchComponent = () => {
 				<CardHeader>
 					<CardTitle>Scrape Job Links from Xing</CardTitle>
 					<CardDescription>
-						To scrape single job use input button and to scrape multiple jobs
-						use checkboxes{' '}
+						To scrape single job search in input and to scrape multiple jobs use
+						the checkboxes
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
@@ -69,8 +69,14 @@ const SearchComponent = () => {
 					/>
 				</CardContent>
 			</Card>
-
-			<CreateCsv />
+			<Card className="w-full bg-black text-white">
+				<CardHeader>
+					<CardTitle>Generate CSV File</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<CreateCsv />
+				</CardContent>
+			</Card>
 		</div>
 	)
 }

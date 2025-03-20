@@ -79,8 +79,6 @@ export const scrapeJobLinks = async(event: Electron.IpcMainEvent, searchTerm: st
     previousHeight = newHeight;
   }
 
-  
-
   const results = Array.from(jobData, ([href, date]) => ({href, date}))
 
   const saveJobs = results.map(({href, date}) => 
