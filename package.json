@@ -8,13 +8,6 @@
   "env": {
     "NODE_ENV": "production"
   },
-  "build": {
-    "publish": [
-      {
-        "provider": "github"
-      }
-    ]
-  },
   "scripts": {
     "dev": "npm-run-all --parallel dev:react dev:electron",
     "dev:react": "vite",
