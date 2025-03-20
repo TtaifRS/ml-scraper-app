@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  check-nodeenv:
+  check-node-env:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -23,6 +23,7 @@ jobs:
                 fi
 
   build-mac:
+    needs: check-node-env
     runs-on: macos-latest
     steps:
       - name: Checkout code
@@ -54,6 +55,7 @@ jobs:
           path: dist/*.dmg
 
   build-windows:
+    needs: check-node-env
     runs-on: windows-latest
     steps:
       - name: Checkout code
