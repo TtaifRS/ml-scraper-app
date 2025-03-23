@@ -35,7 +35,9 @@ const UpdateProgres: React.FC = () => {
 
 	return (
 		<div className="fixed bottom-5 right-5 bg-amber-50 p-2.5 border-2 border-b-blue-200 rounded-b-sm shadow-md z-50">
-			<p className="ml-1.5">Downloading Update: {progress.toFixed(2)}%</p>
+			<p className="ml-1.5 text-black">
+				Downloading Update: {progress.toFixed(2)}%
+			</p>
 			<progress value={progress} max={100} className="w-[200px]" />
 		</div>
 	)
