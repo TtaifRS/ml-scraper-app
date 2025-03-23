@@ -3,6 +3,16 @@
   "productName": "Xing-scraper",
   "files": ["dist-electron", "dist-react"],
   "icon": "./xing-icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TtaifRS/ml-scraper-app"
+  },
+  "publish": {
+    "provider": "github",
+    "owner": "TtaifRS",
+    "repo": "ml-scraper-app",
+    "releaseType": "release"
+  },
   "extraResources": [
    {
     "from":  "dist-electron/preload.cjs",
@@ -47,7 +57,6 @@
     "uninstallDisplayName": "Xing Scraper Uninstall"
 
   },
-  "buildVersion": "1.0.0",
   "asar": false,
   "asarUnpack": [
     "**/*.node",
