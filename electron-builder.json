@@ -7,12 +7,14 @@
     "type": "git",
     "url": "https://github.com/TtaifRS/ml-scraper-app"
   },
-  "publish": {
-    "provider": "github",
-    "owner": "TtaifRS",
-    "repo": "ml-scraper-app",
-    "releaseType": "release"
-  },
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "TtaifRS",
+      "repo": "ml-scraper-app",
+      "releaseType": "release"
+    }
+  ],
   "extraResources": [
    {
     "from":  "dist-electron/preload.cjs",

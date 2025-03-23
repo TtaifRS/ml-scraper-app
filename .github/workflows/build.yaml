@@ -54,6 +54,11 @@ jobs:
           name: Xing-scraper-mac
           path: dist/*.dmg
 
+      - name: Publish Mac Update
+        run: npm run publish
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
   build-windows:
     needs: check-node-env
     runs-on: windows-latest
@@ -85,3 +90,8 @@ jobs:
         with:
           name: Xing-scraper-windows
           path: dist/*.exe
+
+      - name: Publish Windows Update
+        run: npm run publish
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
