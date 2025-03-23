@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
-import {autoUpdater} from 'electron-updater'
+import pkg from 'electron-updater'
 import path from 'path'
 import type { Browser } from "rebrowser-puppeteer-core";
 import dotenv from 'dotenv'
@@ -26,6 +26,8 @@ import { createRealBrowser } from './services/puppteerConnection.js'
 const uri: string = process.env.MONGO_URI || ""
 let mainWindow: BrowserWindow | null = null
 let splashWindow: BrowserWindow | null = null
+
+const {autoUpdater} = pkg
 
 autoUpdater.autoDownload = false
 autoUpdater.allowPrerelease = false
