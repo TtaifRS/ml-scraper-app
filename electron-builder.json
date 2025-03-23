@@ -3,10 +3,6 @@
   "productName": "Xing-scraper",
   "files": ["dist-electron", "dist-react"],
   "icon": "./xing-icon.png",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/TtaifRS/ml-scraper-app"
-  },
   "publish": [
     {
       "provider": "github",
