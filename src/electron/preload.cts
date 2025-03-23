@@ -28,6 +28,10 @@ interface ElectronAPI {
   downloadCsv: () => void,
   onDownloadSuccess: (callback: (result: string) => void) => Unsubscribe
   onDownloadError: (callback: (result: string) => void) => Unsubscribe
+
+  onUpdateDownloadStart: (callback: () => void) => Unsubscribe
+  onUpdateDownloadProgress: (callback: (progressObj: {percent: number}) => void) => Unsubscribe
+  onUpdateDownloadComplete: (callback: () => void) => Unsubscribe
 }
 
 type Unsubscribe = () => void
@@ -69,7 +73,12 @@ const electronAPI : ElectronAPI = {
   //Download CSV
   downloadCsv: () => ipcRenderer.send('download-csv'),
   onDownloadSuccess: createIpcHandler('download-csv-result'),
-  onDownloadError: createIpcHandler('download-csv-error')
+  onDownloadError: createIpcHandler('download-csv-error'),
+
+  //Update Downlaod
+  onUpdateDownloadStart: createIpcHandler('update-download-start'),
+  onUpdateDownloadProgress: createIpcHandler('update-download-progress'),
+  onUpdateDownloadComplete: createIpcHandler('update-download-complete')
 }
 
 

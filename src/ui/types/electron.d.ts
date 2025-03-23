@@ -30,6 +30,10 @@ declare global {
       onMultipleSearchProgress:(callback: (msg: string) => void) => Unsubscribe
       onMultipleSearchResult: (callback: (result: string) => void) => Unsubscribe
       onMultipleSearchError: (callback: (error: string) => void) => Unsubscribe
+
+      onUpdateDownloadStart: (callback: () => void) => Unsubscribe
+      onUpdateDownloadProgress: (callback: (progressObj: {percent: number}) => void) => Unsubscribe
+      onUpdateDownloadComplete: (callback: () => void) => Unsubscribe
 		}
 	}
 }

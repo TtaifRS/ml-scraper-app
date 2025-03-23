@@ -29,6 +29,7 @@ const uri: string = process.env.MONGO_URI || ""
 let mainWindow: BrowserWindow | null = null
 let splashWindow: BrowserWindow | null = null
 
+
 const {autoUpdater} = pkg
 
 log.transports.file.level = 'info'
@@ -129,12 +130,31 @@ autoUpdater.on('update-available', (info) => {
   })
   .then((result) => {
     if(result.response === 0) {
+      if(mainWindow){
+        mainWindow.webContents.send('update-download-start')
+      }
       autoUpdater.downloadUpdate()
     }
   })
 })
 
+
+autoUpdater.on('download-progress', (progressObj) => {
+  const logMessage = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`
+
+  log.info(logMessage)
+
+  if(mainWindow){
+    mainWindow.webContents.send('update-download-progress', progressObj)
+  }
+})
+
+
+
 autoUpdater.on('update-downloaded', () => {
+  if(mainWindow){
+    mainWindow.webContents.send('update-download-complete')
+  }
   dialog.showMessageBox({
     type: 'info',
     title: 'Update Ready. Please donwload the new update',
@@ -150,6 +170,7 @@ autoUpdater.on('update-downloaded', () => {
 
 autoUpdater.on('error', () => {
   log.error('Auto update error')
+  dialog.showErrorBox('Update Error', 'An error occured while updating the app. Please try again later.')
 })
 
 let currentBrowser : Browser | null = null
