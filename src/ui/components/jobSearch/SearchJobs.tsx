@@ -27,7 +27,7 @@ const SearchJobs: React.FC<SearchJobsProps> = ({
 			<div className="flex w-full flex-row justify-between gap-20  items-end overflow-hidden">
 				<Input
 					value={searchTerm}
-					placeholder="Search Job"
+					placeholder="Search Job by job titles"
 					className="focus-visible:ring-0"
 					onChange={(e) => setSearchTerm(e.target.value)}
 				/>

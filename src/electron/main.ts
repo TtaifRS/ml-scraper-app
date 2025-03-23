@@ -36,9 +36,14 @@ async function createMainWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
+    show: false,
     webPreferences: {
-      preload: getPreloadPath()
-    }
+      preload: getPreloadPath(),
+      nodeIntegration: false,
+      contextIsolation: true,
+    },
+    minimizable: true,
+
   }) 
   if(isDev()){
     mainWindow.loadURL('http://localhost:5123')
@@ -57,7 +62,9 @@ async function createMainWindow() {
     }
     mainWindow?.show()
 
-    autoUpdater.checkForUpdatesAndNotify()
+    autoUpdater.checkForUpdatesAndNotify().catch((err) => {
+      console.error('Auto update check failed', err)
+    })
   })
 
   
