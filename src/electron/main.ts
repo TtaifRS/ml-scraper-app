@@ -120,7 +120,7 @@ app.whenReady().then(async () => {
 
 
 autoUpdater.on('update-available', (info) => {
-  autoUpdater.logger?.info(`Update available: ${info}`)
+  log.info(`Update available: ${info}`)
   dialog.showMessageBox({
     type: 'info',
     title: 'Update availble',
@@ -149,7 +149,7 @@ autoUpdater.on('update-downloaded', () => {
 })
 
 autoUpdater.on('error', () => {
-  autoUpdater.logger?.error('Auto update error')
+  log.error('Auto update error')
 })
 
 let currentBrowser : Browser | null = null
