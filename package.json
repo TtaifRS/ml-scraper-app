@@ -8,6 +8,13 @@
   "env": {
     "NODE_ENV": "production"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TtaifRS/ml-scraper-app"
+  },
+  "publish": {
+    "provider": "github"
+  },
   "scripts": {
     "dev": "npm-run-all --parallel dev:react dev:electron",
     "dev:react": "vite",
