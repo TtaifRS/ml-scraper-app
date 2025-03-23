@@ -137,7 +137,7 @@ autoUpdater.on('update-available', (info) => {
 autoUpdater.on('update-downloaded', () => {
   dialog.showMessageBox({
     type: 'info',
-    title: 'Update Ready',
+    title: 'Update Ready. Please donwload the new update',
     message: 'The new version has been downloaded. Restart the app to apply the update',
     buttons: ['Restart Now']
   })

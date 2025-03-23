@@ -1,7 +1,7 @@
 {
   "name": "ml-xing-electron",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "main": "dist-electron/main.js",
   "author": "Taif Rahaman",
@@ -19,7 +19,7 @@
     "dist:mac": "npm run transpile:electron && npm run build && electron-builder --mac --arm64",
     "dist:win": "npm run transpile:electron && npm run build && electron-builder --win --x64",
     "dist:linux": "npm run transpile:electron && npm run build && electron-builder --linux --x64",
-    "publish": "electron-builder --publish always"
+    "publish": "electron-builder --publish always --draft=false --prerelease=false"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.3",
