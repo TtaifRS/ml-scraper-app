@@ -5,11 +5,12 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card'
-import CreateCsv from './CreateCsv'
-import ScraperDetails from './ScraperDetails'
-import JobLinkScraper from './jobSearch/JobLinkScraper'
+import CreateCsv from '../components/CreateCsv'
+import ScraperDetails from '../components/ScraperDetails'
+import JobLinkScraper from '../components/jobSearch/JobLinkScraper'
+import UpdateProgres from '../components/UpdateProgressComponent'
 
-const SearchComponent = () => {
+const XingScraper = () => {
 	return (
 		<div className="flex flex-col gap-[16px] bg-black w-screen h-full items-start justify-center px-[120px] overflow-hidden py-10">
 			<Card className="w-full bg-black text-white">
@@ -77,8 +78,10 @@ const SearchComponent = () => {
 					<CreateCsv />
 				</CardContent>
 			</Card>
+
+			<UpdateProgres />
 		</div>
 	)
 }
 
-export default SearchComponent
+export default XingScraper

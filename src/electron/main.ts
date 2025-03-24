@@ -125,11 +125,11 @@ autoUpdater.on('update-available', (info) => {
   dialog.showMessageBox({
     type: 'info',
     title: 'Update availble',
-    message: `A new version ${info.version} is available. Do want to download and install it now?`,
-    buttons: ['Yes', 'Later']
+    message: `A new version ${info.version} is available. Please download the latest version.`,
+    buttons: ['Yes', 'Download Now']
   })
   .then((result) => {
-    if(result.response === 0) {
+    if(result.response === 0 || result.response === 1) {
       if(mainWindow){
         mainWindow.webContents.send('update-download-start')
       }

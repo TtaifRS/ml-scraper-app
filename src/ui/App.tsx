@@ -1,12 +1,20 @@
-import SearchComponent from './components/SearchComponent'
-import UpdateProgres from './components/UpdateProgressComponent'
+import { HashRouter as Router, Routes, Route } from 'react-router-dom'
+import XingScraper from './screen/XingScraperScreen'
+
+import XingTable from './screen/XingTableScreen'
+import Sidebar from './components/sidebar/Sidebar'
 
 function App() {
 	return (
-		<>
-			<SearchComponent />
-			<UpdateProgres />
-		</>
+		<Router>
+			<div className="flex">
+				<Sidebar />
+				<Routes>
+					<Route path="/" element={<XingScraper />} />
+					<Route path="/xing-table" element={<XingTable />} />
+				</Routes>
+			</div>
+		</Router>
 	)
 }
 export default App
