@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Menu, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 const Sidebar = () => {
 	const [open, setOpen] = useState<boolean>(false)

@@ -1,6 +1,6 @@
+import { useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useEffect, useRef } from 'react'
 
 export interface ConsoleMessage {
 	type: 'progress' | 'result' | 'error'
@@ -32,7 +32,7 @@ const ConsoleArea: React.FC<ConsoleAreaProps> = ({
 	}, [consoleMessages])
 
 	return (
-		<div className="bg-gray-900 w-full rounded-lg shadow-lg p-4 mt-4">
+		<div className="bg-gray-900 w-full rounded-lg shadow-lg p-4 mt-4 overflox-x-hidden">
 			<div className="flex justify-between items-center mb-2">
 				<p className="text-blue-300 font-mono text-sm">{title}</p>
 				{consoleMessages.length > 0 && (

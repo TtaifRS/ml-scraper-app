@@ -2,15 +2,21 @@ import axios from 'axios'
 import * as cheerio from 'cheerio'
 import UserAgent from 'user-agents'
 import pLimit from 'p-limit'
+import { Types } from 'mongoose'
 
 import { httpsAgent } from '../../../config/proxies.js'
+
+import Company, { ICompany } from '../../../models/company.model.js'
+import Job  from '../../../models/job.model.js'
+
 import { withRetries } from '../../../helpers/withRetries.js'
 import { randomWait } from '../../../helpers/randomWait.js'
+import { getCurrentime } from '../../../helpers/getCurrentTime.js'
 
 import { getJobsWithCompanyURLandNullCompany } from '../rest/getJobs.js'
-import Company from '../../../models/company.model.js'
-import Job  from '../../../models/job.model.js'
-import { getCurrentime } from '../../../helpers/getCurrentTime.js'
+
+
+
 
 
 const CONCURRENCY_LIMIT = 25
@@ -134,11 +140,21 @@ export default async function scrapeCompnayAndUpdateDB(event: Electron.IpcMainEv
 
         const exisitingCompany = await Company.findOne({profileUrl: companyUrl})
 
+        const jobs = await Job.find({companyUrl})
+        const jobIds = [...new Set(jobs.map(job => job._id as Types.ObjectId))]
+        const jobServices = [...new Set(jobs.map(job => job.companyService).filter(Boolean))]
+
+        const selectedService = jobServices.length > 0 ? jobServices[0] : null
+
         if(!exisitingCompany) {
           const companyData = await scrapeCompanyWithRetries(companyUrl)
 
           if(companyData && companyData.name){
-            const newCompany = await Company.create(companyData)
+            const newCompany = await Company.create({
+              ...companyData,
+              jobs: jobIds,
+              service: selectedService || null
+            })
 
             results.push(newCompany)
 
@@ -150,6 +166,16 @@ export default async function scrapeCompnayAndUpdateDB(event: Electron.IpcMainEv
           }
           
         }else{
+          const updateFields: Partial<ICompany> = {
+            jobs: [...new Set([...exisitingCompany.jobs, ...jobIds])]
+          }
+
+          if(!exisitingCompany.service && selectedService){
+            updateFields.service = selectedService
+          }
+
+          await Company.updateOne({_id: exisitingCompany._id}, {$set: updateFields})
+
           await Job.updateMany({ companyUrl }, { company: exisitingCompany._id });
           console.log(`Company already exists: ${exisitingCompany.name}`)
           event.reply('scrape-companies-progress', `[${getCurrentime()}] Company already exists: ${exisitingCompany.name}`)

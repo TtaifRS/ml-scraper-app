@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { jobCategories } from '../../data/jobCategories'
+import { FixedSizeList as List } from 'react-window'
+import { Loader2 } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
 	Accordion,
@@ -7,11 +8,9 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from '@/components/ui/accordion'
-// import { ChevronDown } from 'lucide-react'
-import { FixedSizeList as List } from 'react-window'
 import { Button } from '@/components/ui/button'
-import { Loader2 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
+import { jobCategories } from '../../data/jobCategories'
 
 interface JobTitleSelectorProps {
 	isDisabled: boolean
@@ -75,7 +74,7 @@ const JobTitleSelector: React.FC<JobTitleSelectorProps> = ({
 	}
 
 	return (
-		<div className="w-full mx-auto p-4">
+		<div className="w-full mx-auto p-4 overflow-x-hidden">
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-row justify-between items-center">
 					<h2 className="font-black text-lg">Select Job Titles</h2>

@@ -1,17 +1,18 @@
-import { ICompany } from '@/electron/models/company.model'
+import { ICompany } from './company'
+
 
 type Unsubscribe = () => void
 
-interface CompanyQueryParams {
+export interface CompanyQueryParams {
   page: number,
   limit: number,
-  city?: string,
+  city?: string | undefined,
   search?: string,
-  sortBy: string,
+  sortBy: keyof ICompany,
   sortOrder: 'asc' | 'desc'
 }
 
-interface PaginatedCompaniesResult{
+export interface PaginatedCompaniesResult{
   companies: ICompany[],
   totalPages: number,
   currentPage: number

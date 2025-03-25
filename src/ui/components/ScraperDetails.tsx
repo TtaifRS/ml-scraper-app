@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import ConsoleArea, { ConsoleMessage } from './ConsoleArea'
-import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import ConsoleArea, { ConsoleMessage } from './ConsoleArea'
 
 interface ScraperProps {
 	title: string
@@ -60,7 +60,7 @@ const ScraperDetails: React.FC<ScraperProps> = ({
 	}
 
 	return (
-		<div className="w-full flex flex-col gap-2 p-4">
+		<div className="w-full flex flex-col gap-2 p-4 overflow-x-hidden">
 			<div className="flex justify-between">
 				<p className="font-bold text-xl">{title}</p>
 				{isLoading ? (

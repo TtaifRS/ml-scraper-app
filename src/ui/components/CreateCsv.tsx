@@ -1,5 +1,5 @@
-import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
 
 const CreateCsv = () => {
 	const [result, setResult] = useState<string>('')
@@ -35,7 +35,7 @@ const CreateCsv = () => {
 
 	return (
 		<>
-			<div className="flex w-full flex-row gap-[8px] items-center p-4">
+			<div className="flex w-full flex-row gap-[8px] items-center p-4 overflow-x-hidden">
 				<p className="w-full font-medium text-xl">Download CSV File</p>
 				<Button
 					onClick={handleCsvDownload}

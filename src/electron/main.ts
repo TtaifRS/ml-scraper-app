@@ -12,15 +12,19 @@ dotenvExpand.expand(dotenv.config({
 })
 )
 
+import connectDB from './config/database.js'
 
 import { getPreloadPath } from './pathResolver.js'
+
+import { createRealBrowser } from './services/puppteerConnection.js'
+
+import exportJobsToCSV from './services/xing/createCsv.js'
+
 import { scrapeJobLinks } from './services/xing/scrape-logic/scrapeJobLinks.js'
-import connectDB from './config/database.js'
 import scrapeJobAndUpdateDB from './services/xing/scrape-logic/scrapeJobDesc.js'
 import scrapeCompnayAndUpdateDB from './services/xing/scrape-logic/scrapeCompanyDetails.js'
-import exportJobsToCSV from './services/xing/createCsv.js'
 import { ScrapeMultipleJobLinks } from './services/xing/scrape-logic/ScrapeMultipleJobLinks.js'
-import { createRealBrowser } from './services/puppteerConnection.js'
+
 import { getCities, getCompanies, GetCompaniesParam } from './services/xing/rest/getCompanies.js';
 
 

@@ -1,7 +1,7 @@
+import { useState } from 'react'
+import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Loader2 } from 'lucide-react'
-import { useState } from 'react'
 
 interface SearchJobsProps {
 	isDisabled: boolean
@@ -23,7 +23,7 @@ const SearchJobs: React.FC<SearchJobsProps> = ({
 	}
 
 	return (
-		<div className="w-full mx-auto p-4 ">
+		<div className="w-full mx-auto p-4 overflow-x-hidden">
 			<div className="flex w-full flex-row justify-between gap-20  items-end overflow-hidden">
 				<Input
 					value={searchTerm}

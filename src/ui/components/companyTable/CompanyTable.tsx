@@ -1,126 +1,262 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Input } from '@/components/ui/input'
+import { useCities } from '@/ui/hooks/useCities'
+import { useEffect, useMemo, useState } from 'react'
+import { useDebounce } from 'use-debounce'
 import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select'
+	createColumnHelper,
+	flexRender,
+	getCoreRowModel,
+	getPaginationRowModel,
+	getSortedRowModel,
+	useReactTable,
+	type PaginationState,
+	type SortingState,
+} from '@tanstack/react-table'
 import { ICompany } from '@/ui/types/company'
+import { useCompanies } from '@/ui/hooks/useCompanies'
+import { CityFilter } from './CityFilter'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import {
+	ChevronLeft,
+	ChevronRight,
+	ChevronsLeft,
+	ChevronsRight,
+} from 'lucide-react'
 
-import { useEffect, useState } from 'react'
+const columnHelper = createColumnHelper<ICompany>()
 
-const All_CITIES_OPTION = {
-	value: 'All Cities',
-	label: 'All Cities',
-}
+const CompanyTable = () => {
+	const [searchValue, setSearchValue] = useState<string>('')
+	const [debouncedSearch] = useDebounce(searchValue, 1000)
+	const [selectedCity, setSelectedCity] = useState<string>('')
+	const [sorting, setSorting] = useState<SortingState>([])
+	const [pagination, setPagination] = useState<PaginationState>({
+		pageIndex: 0,
+		pageSize: 50,
+	})
 
-const CompanyTester: React.FC = () => {
-	const [search, setSearch] = useState<string>('')
-	const [city, setCity] = useState<string>(All_CITIES_OPTION.value)
-	const [cities, setCities] = useState<string[]>([])
-	const [companies, setCompanies] = useState<ICompany[]>([])
-	const [isLoading, setIsLoading] = useState<boolean>(false)
-	const [error, setError] = useState<string | null>(null)
+	const { cities = [] } = useCities()
+	const { companies, isLoading, error, totalPages } = useCompanies({
+		pageIndex: pagination.pageIndex,
+		pageSize: pagination.pageSize,
+		sortBy: sorting,
+		search: debouncedSearch,
+		city: selectedCity,
+	})
 
-	const fetchData = async () => {
-		try {
-			setIsLoading(true)
-			setError(null)
+	const columns = useMemo(
+		() => [
+			columnHelper.accessor('name', {
+				header: 'Name',
+				cell: (info) => info.getValue(),
+			}),
+			columnHelper.accessor('city', {
+				header: 'City',
+				cell: (info) => info.getValue() || '-',
+			}),
+			columnHelper.accessor('fullAddress', {
+				header: 'Full Address',
+				cell: (info) => info.getValue() || '-',
+			}),
+			columnHelper.accessor('phoneNumber', {
+				header: 'Phone number',
+				cell: (info) => info.getValue() || '-',
+			}),
+			columnHelper.accessor('email', {
+				header: 'Email',
+				cell: (info) => info.getValue() || '-',
+			}),
+			columnHelper.accessor('website', {
+				header: 'Website',
+				cell: (info) => info.getValue() || '-',
+			}),
+			columnHelper.accessor('employees', {
+				header: 'Employees',
+				cell: (info) => info.getValue() || '-',
+			}),
+			columnHelper.accessor('service', {
+				header: 'Service',
+				cell: (info) => info.getValue() || '-',
+			}),
+			columnHelper.accessor('employeeRecommendation', {
+				header: 'Employee Recomendation',
+				cell: (info) => info.getValue() || '-',
+			}),
+			columnHelper.accessor('ratings', {
+				header: 'Ratings',
+				cell: (info) => info.getValue() || '-',
+			}),
+			columnHelper.accessor('contactInfoName', {
+				header: 'Contact Name',
+				cell: (info) => info.getValue() || '-',
+			}),
+			columnHelper.accessor('contactInfoPosition', {
+				header: 'Contact Position',
+				cell: (info) => info.getValue() || '-',
+			}),
+			columnHelper.accessor('jobs', {
+				header: 'Total Jobs',
+				cell: (info) => {
+					const jobs = info.getValue() as string[]
+					return jobs ? jobs.length : 0
+				},
+			}),
+			columnHelper.accessor('slogan', {
+				header: 'Slogan',
+				cell: (info) => info.getValue() || '-',
+			}),
 
-			const companiesData = await window.electronAPI.getCompanies({
-				page: 1,
-				limit: 1000,
-				city: city !== All_CITIES_OPTION.value ? city : undefined,
-				search: search.length ? search : undefined,
-				sortBy: 'name',
-				sortOrder: 'asc',
-			})
+			columnHelper.accessor('xingFollowers', {
+				header: 'Xing Followers',
+				cell: (info) => info.getValue() || '-',
+			}),
+			columnHelper.accessor('createdAt', {
+				header: 'Created At',
+				cell: (info) => new Date(info.getValue()).toLocaleString(),
+			}),
+			columnHelper.accessor('updatedAt', {
+				header: 'Updated At',
+				cell: (info) => new Date(info.getValue()).toLocaleString(),
+			}),
+		],
+		[]
+	)
 
-			setCompanies(companiesData.companies)
-
-			if (cities.length === 0) {
-				const citiesData = await window.electronAPI.getCities()
-				const cities = [...citiesData, All_CITIES_OPTION.value]
-				setCities(cities)
-			}
-		} catch (error) {
-			console.log('API ERROR', error)
-			setError(error instanceof Error ? error.message : 'An error occured')
-		} finally {
-			setIsLoading(false)
-		}
-	}
+	const table = useReactTable({
+		data: companies || [],
+		columns,
+		pageCount: totalPages || -1,
+		state: {
+			sorting,
+			pagination,
+		},
+		onSortingChange: setSorting,
+		onPaginationChange: setPagination,
+		getCoreRowModel: getCoreRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
+		manualPagination: true,
+		manualSorting: true,
+	})
 
 	useEffect(() => {
-		const debounceTimer = setTimeout(() => {
-			fetchData()
-		}, 500)
-
-		return () => clearTimeout(debounceTimer)
-	}, [search, city])
-
-	useEffect(() => {
-		fetchData()
-	}, [])
+		table.setPageIndex(0)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [debouncedSearch, selectedCity])
 
 	return (
-		<div className="h-full w-full">
-			<h1>Company Table</h1>
-			<div className="flex gap-4 items-center">
+		<div className="p-4">
+			<h1 className="text-2xl font-bold mb-6">Xing Company</h1>
+			<div className="flex flex-col sm:flex-row gap-4 mb-6 w-[1000px]">
 				<Input
 					placeholder="search term"
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
+					value={searchValue}
+					onChange={(e) => setSearchValue(e.target.value)}
 					className="mx-w-sm"
 					disabled={isLoading}
 				/>
-
-				{isLoading ? (
-					<span>Loading...</span>
-				) : (
-					<Select value={city} onValueChange={setCity} disabled={isLoading}>
-						<SelectTrigger>
-							<SelectValue placeholder="Select City" />
-						</SelectTrigger>
-						<SelectContent>
-							{cities.map((cityOption) => (
-								<SelectItem key={cityOption} value={cityOption}>
-									{cityOption}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
-				)}
+				<CityFilter
+					cities={cities}
+					value={selectedCity}
+					onChange={setSelectedCity}
+					disabled={isLoading || cities.length === 0}
+				/>
 			</div>
-			{error && <div>Error: {error}</div>}
 
-			<div className="mt-4">
-				<h3>Companies</h3>
-				{companies.length > 0 ? (
-					<ul>
-						{companies.map((company) => (
-							<li key={company._id}>
-								<div>Name: {company.name}</div>
-								<hr />
-								<div>URL: {company.profileUrl}</div>
-								<hr />
-								<div>Service: {company.service}</div>
-								<hr />
-								{company.city && <div>City: {company.city}</div>}
-								<hr />
-								{company.xingFollowers && <div>{company.xingFollowers}</div>}
-								<br />
-							</li>
-						))}
-					</ul>
-				) : (
-					<div>No companies found</div>
-				)}
-			</div>
+			{error && (
+				<div className="mb-4 p-3 bg-red-100 text-red-800 rounded-md">
+					{error}
+				</div>
+			)}
+
+			{isLoading && (
+				<div className="flex justify-center p-8">
+					<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white" />
+				</div>
+			)}
+
+			{!isLoading && table.getRowModel().rows.length > 0 && (
+				<>
+					<div className="overflow-x-auto">
+						<table className="min-w-full border-collapse" role="grid">
+							<thead>
+								{table.getHeaderGroups().map((headerGroup) => (
+									<tr key={headerGroup.id}>
+										{headerGroup.headers.map((header) => (
+											<th
+												key={header.id}
+												className="p-3 border-b bg-gray-600 cursor-pointer text-left text-sm font-semibold"
+											>
+												<div className="flex items-center">
+													{flexRender(
+														header.column.columnDef.header,
+														header.getContext()
+													)}
+												</div>
+											</th>
+										))}
+									</tr>
+								))}
+							</thead>
+							<tbody>
+								{table.getRowModel().rows.map((row) => (
+									<tr key={row.id}>
+										{row.getVisibleCells().map((cell) => (
+											<td key={cell.id} className="p-3 border text-sm">
+												{flexRender(
+													cell.column.columnDef.cell,
+													cell.getContext()
+												)}
+											</td>
+										))}
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+					<div className="flex flex-col sm:flex-row items-center mt-6 gap-4 w-[1000px]">
+						<div className="text-sm">
+							Page {pagination.pageIndex + 1} of {table.getPageCount()}
+						</div>
+						<div className="flex gap-2">
+							<Button
+								onClick={() => table.setPageIndex(0)}
+								disabled={!table.getCanPreviousPage()}
+								variant="outline"
+								className="text-white bg-transparent cursor-pointer"
+							>
+								<ChevronsLeft />
+							</Button>
+							<Button
+								onClick={() => table.previousPage()}
+								disabled={!table.getCanPreviousPage()}
+								variant="outline"
+								className="text-white bg-transparent cursor-pointer"
+							>
+								<ChevronLeft />
+							</Button>
+							<Button
+								onClick={() => table.nextPage()}
+								disabled={!table.getCanNextPage()}
+								variant="outline"
+								className="text-white bg-transparent cursor-pointer"
+							>
+								<ChevronRight />
+							</Button>
+							<Button
+								onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+								disabled={!table.getCanNextPage()}
+								variant="outline"
+								className="text-white bg-transparent cursor-pointer"
+							>
+								<ChevronsRight />
+							</Button>
+						</div>
+					</div>
+				</>
+			)}
 		</div>
 	)
 }
 
-export default CompanyTester
+export default CompanyTable

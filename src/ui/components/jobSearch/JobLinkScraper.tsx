@@ -59,7 +59,7 @@ const JobLinkScraper = () => {
 		setConsoleMessage([])
 	}
 	return (
-		<div className="p-4">
+		<div className="p-4  overflow-x-hidden">
 			<SearchJobs isDisabled={isScraping} startScraping={startScraping} />
 			<JobTitleSelector isDisabled={isScraping} startScraping={startScraping} />
 			<ConsoleArea

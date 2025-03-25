@@ -5,11 +5,14 @@ import UserAgent from 'user-agents'
 import pLimit from 'p-limit'
 
 import { httpsAgent } from '../../../config/proxies.js'
+
 import Job from '../../../models/job.model.js'
+
 import { withRetries } from '../../../helpers/withRetries.js'
-import { getJobsToScrape } from '../rest/getJobs.js'
 import { randomWait } from '../../../helpers/randomWait.js'
 import { getCurrentime } from '../../../helpers/getCurrentTime.js'
+
+import { getJobsToScrape } from '../rest/getJobs.js'
 
 
 const CONCURRENCY_LIMIT = 25
