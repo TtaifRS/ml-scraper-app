@@ -21,7 +21,7 @@ const Sidebar = () => {
 
 			<div
 				className={cn(
-					'fixed left-0 top-0 h-full bg-black shadow-lg w-64 transition-transform duration-300 ease-in-out border-r',
+					'fixed left-0 top-0 h-full bg-black opacity-90 shadow-lg w-64 transition-transform duration-300 ease-in-out border-r',
 					open ? 'translate-x-0' : '-translate-x-full'
 				)}
 			>
@@ -31,14 +31,14 @@ const Sidebar = () => {
 						className="px-4 py-2 rounded-lg text-white hover:bg-gray-900"
 						onClick={() => setOpen(false)}
 					>
-						Dashboard
+						Scraper
 					</Link>
 					<Link
 						to="/xing-table"
 						className="px-4 py-2 rounded-lg text-white hover:bg-gray-900"
 						onClick={() => setOpen(false)}
 					>
-						Xing Table
+						Companies
 					</Link>
 				</nav>
 			</div>

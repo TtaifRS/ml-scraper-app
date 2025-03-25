@@ -14,13 +14,16 @@ dotenvExpand.expand(dotenv.config({
 
 
 import { getPreloadPath } from './pathResolver.js'
-import { scrapeJobLinks } from './services/xing/scrapeJobLinks.js'
+import { scrapeJobLinks } from './services/xing/scrape-logic/scrapeJobLinks.js'
 import connectDB from './config/database.js'
-import scrapeJobAndUpdateDB from './services/xing/scrapeJobDesc.js'
-import scrapeCompnayAndUpdateDB from './services/xing/scrapeCompanyDetails.js'
+import scrapeJobAndUpdateDB from './services/xing/scrape-logic/scrapeJobDesc.js'
+import scrapeCompnayAndUpdateDB from './services/xing/scrape-logic/scrapeCompanyDetails.js'
 import exportJobsToCSV from './services/xing/createCsv.js'
-import { ScrapeMultipleJobLinks } from './services/xing/ScrapeMultipleJobLinks.js'
+import { ScrapeMultipleJobLinks } from './services/xing/scrape-logic/ScrapeMultipleJobLinks.js'
 import { createRealBrowser } from './services/puppteerConnection.js'
+import { getCities, getCompanies, GetCompaniesParam } from './services/xing/rest/getCompanies.js';
+
+
 
 
 
@@ -106,6 +109,7 @@ app.whenReady().then(async () => {
     setTimeout(async () => {
       try{
         await connectDB(uri)
+    
         createMainWindow()
       }catch(error){
         console.error('Error starting the app', error instanceof Error ? error.message : error)
@@ -231,6 +235,22 @@ ipcMain.on('download-csv', async(event: Electron.IpcMainEvent) => {
   }
 })
 
+
+ipcMain.handle('get-companies', async(event: Electron.IpcMainInvokeEvent, queryParams: GetCompaniesParam) => {
+  try{
+    return await getCompanies(event, queryParams)
+  }catch(error){
+    console.error(error)
+  }
+})
+
+ipcMain.handle('get-cities', async() => {
+  try{
+   return await getCities()
+  }catch(error){
+    console.error(error)
+  }
+})
 
 
 app.on('window-all-closed', () => {

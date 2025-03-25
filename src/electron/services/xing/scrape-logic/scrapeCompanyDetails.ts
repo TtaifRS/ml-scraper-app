@@ -3,14 +3,14 @@ import * as cheerio from 'cheerio'
 import UserAgent from 'user-agents'
 import pLimit from 'p-limit'
 
-import { httpsAgent } from '../../config/proxies.js'
-import { withRetries } from '../../helpers/withRetries.js'
-import { randomWait } from '../../helpers/randomWait.js'
+import { httpsAgent } from '../../../config/proxies.js'
+import { withRetries } from '../../../helpers/withRetries.js'
+import { randomWait } from '../../../helpers/randomWait.js'
 
-import { getJobsWithCompanyURLandNullCompany } from './getJobs.js'
-import Company from '../../models/company.model.js'
-import { Job } from '../../models/job.model.js'
-import { getCurrentime } from '../../helpers/getCurrentTime.js'
+import { getJobsWithCompanyURLandNullCompany } from '../rest/getJobs.js'
+import Company from '../../../models/company.model.js'
+import Job  from '../../../models/job.model.js'
+import { getCurrentime } from '../../../helpers/getCurrentTime.js'
 
 
 const CONCURRENCY_LIMIT = 25
@@ -143,6 +143,7 @@ export default async function scrapeCompnayAndUpdateDB(event: Electron.IpcMainEv
             results.push(newCompany)
 
             await Job.updateMany({companyUrl}, {company: newCompany._id})
+            
 
             console.log(`Stored company in database: ${companyData.name}`)
             event.reply('scrape-companies-progress', `[${getCurrentime()}] Stored company in database: ${companyData.name}`)

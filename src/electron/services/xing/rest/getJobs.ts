@@ -1,5 +1,5 @@
-import Company from '../../models/company.model.js';
-import { Job, IJob } from '../../models/job.model.js';
+import Company from '../../../models/company.model.js';
+import Job, { IJob } from '../../../models/job.model.js';
 
 export async function getJobsToScrape(): Promise<IJob[]> {
   try{

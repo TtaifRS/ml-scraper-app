@@ -1,9 +1,9 @@
 import type { Browser, Page } from "rebrowser-puppeteer-core";
 import * as cheerio from 'cheerio'
-import { blockUnnecessaryResources } from '../puppteerConnection.js'
-import { parseRelativeDate } from '../../helpers/parseRelativeData.js';
-import { Job } from '../../models/job.model.js';
-import { getCurrentime } from '../../helpers/getCurrentTime.js';
+import { blockUnnecessaryResources } from '../../puppteerConnection.js'
+import { parseRelativeDate } from '../../../helpers/parseRelativeData.js';
+import Job from '../../../models/job.model.js';
+import { getCurrentime } from '../../../helpers/getCurrentTime.js';
 
 
 

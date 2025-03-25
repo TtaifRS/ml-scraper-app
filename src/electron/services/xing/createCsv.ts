@@ -1,6 +1,6 @@
 import fs from 'fs'
 import {format} from 'fast-csv'
-import { getJobswithComapnayInfo } from './getJobs.js'  
+import { getJobswithComapnayInfo } from './rest/getJobs.js'  
 import { dialog } from 'electron'
 import { ICompany } from '../../models/company.model.js'
 

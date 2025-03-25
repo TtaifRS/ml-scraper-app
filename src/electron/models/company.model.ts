@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Types } from 'mongoose';
 
 export interface ICompany extends Document{
   profileUrl: string,
@@ -16,6 +16,7 @@ export interface ICompany extends Document{
   phoneNumber: string | null,
   email: string | null, 
   website: string | null,
+  jobs: Types.ObjectId[] 
   createdAt: Date,
   updatedAt: Date
 }
@@ -88,7 +89,12 @@ const companySchema = new Schema<ICompany>({
   website: {
     type: String,
     required: false
-  }
+  },
+  jobs: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Job',
+    default: []
+  }]
 }, { timestamps: true })
 
 const Company = model<ICompany>('Company', companySchema)

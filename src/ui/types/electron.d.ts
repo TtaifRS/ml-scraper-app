@@ -1,4 +1,21 @@
+import { ICompany } from '@/electron/models/company.model'
+
 type Unsubscribe = () => void
+
+interface CompanyQueryParams {
+  page: number,
+  limit: number,
+  city?: string,
+  search?: string,
+  sortBy: string,
+  sortOrder: 'asc' | 'desc'
+}
+
+interface PaginatedCompaniesResult{
+  companies: ICompany[],
+  totalPages: number,
+  currentPage: number
+}
 
 declare global {
 	interface Window {
@@ -34,6 +51,9 @@ declare global {
       onUpdateDownloadStart: (callback: () => void) => Unsubscribe
       onUpdateDownloadProgress: (callback: (progressObj: {percent: number}) => void) => Unsubscribe
       onUpdateDownloadComplete: (callback: () => void) => Unsubscribe
+
+      getCompanies: (queryParams: CompanyQueryParams) => promise<PaginatedCompaniesResult>
+      getCities: () => Promise<string[]>
 		}
 	}
 }

@@ -1,6 +1,6 @@
-import { getCurrentime } from '../../helpers/getCurrentTime.js'
-import { randomWait } from '../../helpers/randomWait.js'
-import { createRealBrowser } from '../puppteerConnection.js'
+import { getCurrentime } from '../../../helpers/getCurrentTime.js'
+import { randomWait } from '../../../helpers/randomWait.js'
+import { createRealBrowser } from '../../puppteerConnection.js'
 import { scrapeJobLinks } from './scrapeJobLinks.js'
 
 export const ScrapeMultipleJobLinks = async(event: Electron.IpcMainEvent, searchParams: string[], ) => {

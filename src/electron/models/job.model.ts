@@ -83,4 +83,6 @@ const JobSchema = new Schema<IJob>({
 }, { timestamps: true })
 
 
-export const Job = model<IJob>('Job', JobSchema)
+const Job = model<IJob>('Job', JobSchema)
+
+export default Job

@@ -1,6 +1,54 @@
+
+
 const electron = require("electron")
 
 const {ipcRenderer} = electron
+
+
+type Unsubscribe = () => void
+
+const createIpcHandler = <T,>(channel: string) => (callback: (payload: T) => void) : Unsubscribe => {
+  const listner = (_event: Electron.IpcRendererEvent, payload: T) => callback(payload)
+  ipcRenderer.on(channel, listner)
+  return () => ipcRenderer.removeListener(channel, listner)
+}
+
+interface ICompany {
+  _id: string,
+  profileUrl: string,
+  name: string,
+  slogan: string | null,
+  service: string | null,
+  xingFollowers: string | null,
+  employees: string | null,
+  ratings: string | null,
+  employeeRecommendation: string | null,
+  contactInfoName: string | null,
+  contactInfoPosition: string | null,
+  city: string | null,
+  fullAddress: string | null,
+  phoneNumber: string | null,
+  email: string | null,
+  website: string | null,
+  jobs: string[],
+  createdAt: string,
+  updatedAt: string
+}
+
+interface CompanyQueryParams {
+  page: number,
+  limit: number,
+  city?: string,
+  search?: string,
+  sortBy: string,
+  sortOrder: 'asc' | 'desc'
+}
+
+interface PaginatedCompaniesResult{
+  companies: ICompany[],
+  totalPages: number,
+  currentPage: number
+}
 
 interface ElectronAPI {
   sendSearch: (searchTerm: string) => void,
@@ -32,15 +80,12 @@ interface ElectronAPI {
   onUpdateDownloadStart: (callback: () => void) => Unsubscribe
   onUpdateDownloadProgress: (callback: (progressObj: {percent: number}) => void) => Unsubscribe
   onUpdateDownloadComplete: (callback: () => void) => Unsubscribe
+
+  getCompanies: (queryParams: CompanyQueryParams) => Promise<PaginatedCompaniesResult>
+  getCities: () => Promise<string[]>
 }
 
-type Unsubscribe = () => void
 
-const createIpcHandler = <T,>(channel: string) => (callback: (payload: T) => void) : Unsubscribe => {
-  const listner = (_event: Electron.IpcRendererEvent, payload: T) => callback(payload)
-  ipcRenderer.on(channel, listner)
-  return () => ipcRenderer.removeListener(channel, listner)
-}
 
 
 const electronAPI : ElectronAPI = {
@@ -78,7 +123,11 @@ const electronAPI : ElectronAPI = {
   //Update Downlaod
   onUpdateDownloadStart: createIpcHandler('update-download-start'),
   onUpdateDownloadProgress: createIpcHandler('update-download-progress'),
-  onUpdateDownloadComplete: createIpcHandler('update-download-complete')
+  onUpdateDownloadComplete: createIpcHandler('update-download-complete'),
+
+  //Company Data API 
+  getCompanies: (queryParams) => ipcRenderer.invoke('get-companies', queryParams),
+  getCities: () => ipcRenderer.invoke('get-cities')
 }
 
 

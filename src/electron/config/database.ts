@@ -17,7 +17,7 @@ export default async function connectDB(uri: string, options?: ClientOptions): P
     serverApi: 
     { 
       version: '1', 
-      strict: true, 
+      strict: false, 
       deprecationErrors: true 
     } 
   }
