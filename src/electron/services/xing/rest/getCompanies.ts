@@ -16,7 +16,7 @@ interface PaginatedCompaniesResult{
   currentPage: number
 }
 
-export const getCompanies = async (event: Electron.IpcMainInvokeEvent, queryParams: GetCompaniesParam) : Promise<PaginatedCompaniesResult> => {
+export const getCompanies = async (_event: Electron.IpcMainInvokeEvent, queryParams: GetCompaniesParam) : Promise<PaginatedCompaniesResult> => {
  try{
   const {page, limit, city, search, sortBy, sortOrder} = queryParams
 
