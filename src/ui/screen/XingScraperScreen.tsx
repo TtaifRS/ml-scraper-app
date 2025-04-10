@@ -5,14 +5,14 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card'
-import CreateCsv from '../components/CreateCsv'
-import ScraperDetails from '../components/ScraperDetails'
-import JobLinkScraper from '../components/jobSearch/JobLinkScraper'
+import CreateCsv from '../components/xing/CreateCsv'
+import ScraperDetails from '../components/xing/ScraperDetails'
+import JobLinkScraper from '../components/xing/jobSearch/JobLinkScraper'
 import UpdateProgres from '../components/UpdateProgressComponent'
 
 const XingScraper = () => {
 	return (
-		<div className="flex flex-col gap-[16px] bg-black w-screen h-full items-start justify-center px-[120px] py-10 overflow-x-hidden ">
+		<div className="flex flex-col gap-[16px] bg-black  h-full items-start justify-center px-[120px] py-10 overflow-x-hidden ">
 			<Card className="w-full bg-black text-white">
 				<CardHeader>
 					<CardTitle>Scrape Job Links from Xing</CardTitle>

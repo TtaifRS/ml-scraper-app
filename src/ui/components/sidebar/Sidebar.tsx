@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import SidebarLink from './SidebarLink'
 
 const Sidebar = () => {
 	const [open, setOpen] = useState<boolean>(false)
@@ -26,20 +27,23 @@ const Sidebar = () => {
 				)}
 			>
 				<nav className="flex flex-col p-4 mt-16 space-y-2">
-					<Link
+					<SidebarLink
 						to="/"
-						className="px-4 py-2 rounded-lg text-white hover:bg-gray-900"
+						title="Xing Scraper"
 						onClick={() => setOpen(false)}
-					>
-						Scraper
-					</Link>
-					<Link
+					/>
+
+					<SidebarLink
 						to="/xing-table"
-						className="px-4 py-2 rounded-lg text-white hover:bg-gray-900"
+						title="Xing Companies"
 						onClick={() => setOpen(false)}
-					>
-						Companies
-					</Link>
+					/>
+
+					<SidebarLink
+						to="/yellow-page"
+						title="Yellow Page Scraper"
+						onClick={() => setOpen(false)}
+					/>
 				</nav>
 			</div>
 		</>

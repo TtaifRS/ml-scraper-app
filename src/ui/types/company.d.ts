@@ -19,3 +19,19 @@ export interface ICompany {
   createdAt: string,
   updatedAt: string
 }
+
+
+export interface CompanyQueryParams {
+  page: number,
+  limit: number,
+  city?: string | undefined,
+  search?: string,
+  sortBy: keyof ICompany,
+  sortOrder: 'asc' | 'desc'
+}
+
+export interface PaginatedCompaniesResult{
+  companies: ICompany[],
+  totalPages: number,
+  currentPage: number
+}

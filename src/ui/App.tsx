@@ -1,8 +1,11 @@
 import { HashRouter as Router, Routes, Route } from 'react-router-dom'
-import XingScraper from './screen/XingScraperScreen'
 
-import XingTable from './screen/XingTableScreen'
 import Sidebar from './components/sidebar/Sidebar'
+
+import XingScraper from './screen/XingScraperScreen'
+import XingTable from './screen/XingTableScreen'
+
+import YellowPageScraper from './screen/YellowPageScreen'
 
 function App() {
 	return (
@@ -12,6 +15,7 @@ function App() {
 				<Routes>
 					<Route path="/" element={<XingScraper />} />
 					<Route path="/xing-table" element={<XingTable />} />
+					<Route path="/yellow-page" element={<YellowPageScraper />} />
 				</Routes>
 			</div>
 		</Router>

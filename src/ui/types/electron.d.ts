@@ -1,22 +1,6 @@
-import { ICompany } from './company'
-
+import { CompanyQueryParams, PaginatedCompaniesResult } from './company'
 
 type Unsubscribe = () => void
-
-export interface CompanyQueryParams {
-  page: number,
-  limit: number,
-  city?: string | undefined,
-  search?: string,
-  sortBy: keyof ICompany,
-  sortOrder: 'asc' | 'desc'
-}
-
-export interface PaginatedCompaniesResult{
-  companies: ICompany[],
-  totalPages: number,
-  currentPage: number
-}
 
 declare global {
 	interface Window {

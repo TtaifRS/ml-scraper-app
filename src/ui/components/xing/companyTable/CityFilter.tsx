@@ -21,7 +21,7 @@ export const CityFilter: React.FC<CityFilterProps> = ({
 }) => (
 	<Select value={value} onValueChange={onChange} disabled={disabled}>
 		<SelectTrigger className="w-[180px]">
-			<SelectValue placeholder="Filter by Value" />
+			<SelectValue placeholder="Filter by City" />
 		</SelectTrigger>
 		<SelectContent>
 			{cities.map((city) => (

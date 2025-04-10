@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import JobTitleSelector from './JobTitleSelector'
 import SearchJobs from './SearchJobs'
-import ConsoleArea, { ConsoleMessage } from '../ConsoleArea'
+import ConsoleArea, { ConsoleMessage } from '../../ConsoleArea'
 
 const JobLinkScraper = () => {
 	const [isScraping, setIsScraping] = useState<boolean>(false)
