@@ -39,6 +39,7 @@ declare global {
 
       getCompanies: (queryParams: CompanyQueryParams) => promise<PaginatedCompaniesResult>
       getCities: () => Promise<string[]>
+      getServices: () => Promise<string[]>
 		}
 	}
 }

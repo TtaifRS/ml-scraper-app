@@ -26,8 +26,11 @@ export interface CompanyQueryParams {
   limit: number,
   city?: string | undefined,
   search?: string,
+  includeServices?: string[]
+  excludeServices?: string[]
   sortBy: keyof ICompany,
   sortOrder: 'asc' | 'desc'
+
 }
 
 export interface PaginatedCompaniesResult{

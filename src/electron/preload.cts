@@ -1,5 +1,6 @@
 
 
+
 const electron = require("electron")
 
 const {ipcRenderer} = electron
@@ -83,6 +84,7 @@ interface ElectronAPI {
 
   getCompanies: (queryParams: CompanyQueryParams) => Promise<PaginatedCompaniesResult>
   getCities: () => Promise<string[]>
+  getServices: () => Promise<string[]>
 }
 
 
@@ -127,7 +129,8 @@ const electronAPI : ElectronAPI = {
 
   //Company Data API 
   getCompanies: (queryParams) => ipcRenderer.invoke('get-companies', queryParams),
-  getCities: () => ipcRenderer.invoke('get-cities')
+  getCities: () => ipcRenderer.invoke('get-cities'),
+  getServices: () => ipcRenderer.invoke('get-services')
 }
 
 

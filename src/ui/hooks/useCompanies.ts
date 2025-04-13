@@ -1,6 +1,5 @@
+import { PaginatedCompaniesResult, CompanyQueryParams, ICompany } from './../types/company.d';
 import { useEffect, useState } from 'react';
-import { ICompany } from '../types/company';
-import { CompanyQueryParams, PaginatedCompaniesResult } from '../types/electron';
 import { ALL_CITIES_OPTION } from './useCities';
 
 interface UseCompaniesParam {
@@ -8,7 +7,9 @@ interface UseCompaniesParam {
   pageSize: number,
   sortBy: Array<{id: string; desc: boolean}>,
   search: string,
-  city: string
+  city: string,
+  includeServices: string[],
+  excludeServices: string[]
 }
 
 export const useCompanies = ({
@@ -16,7 +17,10 @@ export const useCompanies = ({
   pageSize,
   sortBy,
   search,
-  city
+  city,
+  includeServices,
+  excludeServices
+
 }: UseCompaniesParam) => {
 
   const [companies, setCompanies] = useState<ICompany[]>([])
@@ -37,6 +41,8 @@ export const useCompanies = ({
           limit: pageSize,
           city: city && city !== ALL_CITIES_OPTION ? city : undefined,
           search: search || undefined,
+          includeServices: includeServices ,
+          excludeServices,
           sortBy: sortField,
           sortOrder
         }
@@ -52,9 +58,9 @@ export const useCompanies = ({
         setIsLoading(false)
       }
     }
-
+   
     fetchCompanies()
-  },[pageIndex, pageSize, sortBy, search, city])
+  },[pageIndex, pageSize, sortBy, search, city, includeServices, excludeServices])
 
   return {
     companies,

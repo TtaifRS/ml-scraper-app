@@ -22,24 +22,44 @@ import {
 	ChevronsLeft,
 	ChevronsRight,
 } from 'lucide-react'
+import { ServiceFilter } from './ServiceFilter'
+import { useServices } from '@/ui/hooks/useServices'
 
 const columnHelper = createColumnHelper<ICompany>()
+
+type Service = Record<'value' | 'label', string>
 
 const CompanyTable = () => {
 	const [searchValue, setSearchValue] = useState<string>('')
 	const [debouncedSearch] = useDebounce(searchValue, 1000)
 	const [selectedCity, setSelectedCity] = useState<string>('')
 	const [sorting, setSorting] = useState<SortingState>([])
+	const [selectedServices, setSelectedServices] = useState<Service[]>([])
+	const [selectExcludingServices, setSelectExcludingServices] = useState<
+		Service[]
+	>([])
+
 	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 50,
 	})
 
+	const includeServiceHookMemoized = useMemo(() => {
+		return selectedServices.map((selectedService) => selectedService.label)
+	}, [selectedServices])
+	const excludedServiceHookMemoized = useMemo(() => {
+		return selectExcludingServices.map(
+			(selectExludingService) => selectExludingService.label
+		)
+	}, [selectExcludingServices])
 	const { cities = [] } = useCities()
+	const { services } = useServices()
 	const { companies, isLoading, error, totalPages } = useCompanies({
 		pageIndex: pagination.pageIndex,
 		pageSize: pagination.pageSize,
 		sortBy: sorting,
+		includeServices: includeServiceHookMemoized,
+		excludeServices: excludedServiceHookMemoized,
 		search: debouncedSearch,
 		city: selectedCity,
 	})
@@ -160,6 +180,31 @@ const CompanyTable = () => {
 					value={selectedCity}
 					onChange={setSelectedCity}
 					disabled={isLoading || cities.length === 0}
+				/>
+
+				<ServiceFilter
+					services={services.filter(
+						(service) =>
+							!selectExcludingServices.some(
+								(excluded) => excluded.value === service.value
+							)
+					)}
+					value={selectedServices}
+					onChange={setSelectedServices}
+					disabled={isLoading || services.length === 0}
+					placeHolder="Select Services..."
+				/>
+				<ServiceFilter
+					services={services.filter(
+						(service) =>
+							!selectedServices.some(
+								(selected) => selected.value === service.value
+							)
+					)}
+					value={selectExcludingServices}
+					onChange={setSelectExcludingServices}
+					disabled={isLoading || services.length === 0}
+					placeHolder="Exclude Selected Services"
 				/>
 			</div>
 

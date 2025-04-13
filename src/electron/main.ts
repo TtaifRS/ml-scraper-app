@@ -25,11 +25,7 @@ import scrapeJobAndUpdateDB from './services/xing/scrape-logic/scrapeJobDesc.js'
 import scrapeCompnayAndUpdateDB from './services/xing/scrape-logic/scrapeCompanyDetails.js'
 import { ScrapeMultipleJobLinks } from './services/xing/scrape-logic/ScrapeMultipleJobLinks.js'
 
-import { getCities, getCompanies, GetCompaniesParam } from './services/xing/rest/getCompanies.js';
-
-
-
-
+import { getCities, getCompanies, GetCompaniesParam, getServices } from './services/xing/rest/getCompanies.js';
 
 
 const uri: string = process.env.MONGO_URI || ""
@@ -45,6 +41,8 @@ autoUpdater.logger = log
 
 autoUpdater.autoDownload = false
 autoUpdater.allowPrerelease = false
+
+let currentBrowser : Browser | null = null
 
 async function createMainWindow() {
   mainWindow = new BrowserWindow({
@@ -113,7 +111,6 @@ app.whenReady().then(async () => {
     setTimeout(async () => {
       try{
         await connectDB(uri)
-    
         createMainWindow()
       }catch(error){
         console.error('Error starting the app', error instanceof Error ? error.message : error)
@@ -181,7 +178,7 @@ autoUpdater.on('error', () => {
   dialog.showErrorBox('Update Error', 'An error occured while updating the app. Please try again later.')
 })
 
-let currentBrowser : Browser | null = null
+
 
 ipcMain.on('search', async(event: Electron.IpcMainEvent, searchTerm: string) => {
   try{
@@ -251,6 +248,14 @@ ipcMain.handle('get-companies', async(event: Electron.IpcMainInvokeEvent, queryP
 ipcMain.handle('get-cities', async() => {
   try{
    return await getCities()
+  }catch(error){
+    console.error(error)
+  }
+})
+
+ipcMain.handle('get-services', async() => {
+  try{
+    return await getServices()
   }catch(error){
     console.error(error)
   }
