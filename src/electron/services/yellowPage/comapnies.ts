@@ -6,6 +6,10 @@ import * as cheerio from 'cheerio'
 import { httpsAgent } from '../../config/proxies.js';
 import { randomWait } from '../../helpers/randomWait.js';
 import GelbeseitenCompany, { IGelbeseitenCompany } from '../../models/gelbeseitenCompany.model.js';
+import { getCurrentime } from '../../helpers/getCurrentTime.js';
+
+
+const YELLOW_PAGE_PROGRESS_URL = "scrape-yellowpage-progress"
 
 interface Config{
   requestDelay: number,
@@ -113,8 +117,8 @@ async function getListings(event: Electron.IpcMainEvent, industryName: string, c
   const limit = pLimit(CONFIG.concurrencyLimitForListing)
   const listings:Listing[] = []
   try{
-    console.log(`Starting search for: ${industryName} in ${cityName || 'All cities'}`)
-
+    
+    event.reply(YELLOW_PAGE_PROGRESS_URL, `[${getCurrentime()} Starting search for ${industryName}]`)
     const initialParams = new URLSearchParams({WAS: industryName, WO: cityName})
     const initialResponse = await retryableRequest({
       method: 'POST',
@@ -172,7 +176,7 @@ async function getListings(event: Electron.IpcMainEvent, industryName: string, c
                 headers: CONFIG.headers
               })  
               const $$ = cheerio.load(ajaxResponse.data.html)
-              $$('article.mod.mod-Treffer').each((index, element) => {
+              $$('article.mod.mod-Treffer').each((_, element) => {
                   const aTag = $$(element).find('a').first()
                   const href = aTag.attr('href')
                   const name = aTag.find('h2.mod-Treffer__name').text().trim()
@@ -203,8 +207,8 @@ async function getListings(event: Electron.IpcMainEvent, industryName: string, c
 async function getCompanyInformation(event:Electron.IpcMainEvent, listings: Listing[]){
   try{
     const limit = pLimit(CONFIG.concurrencyLimitForCompany)
-    console.log(`processing ${listings.length} companies...`)
-
+ 
+    event.reply(YELLOW_PAGE_PROGRESS_URL, `[${getCurrentime()}] processing ${listings.length} companies...`)
     const companies = await Promise.all(listings.map((listing, index) =>
       limit(async() => {
         try{
@@ -282,7 +286,7 @@ async function getCompanyInformation(event:Electron.IpcMainEvent, listings: List
 
           const socialMediaElms = $('div.mod-Kontaktdaten__social-media-iconlist a')
           if (socialMediaElms.length) {
-            socialMediaElms.each((i, el) => {
+            socialMediaElms.each((_, el) => {
               let platform = ""
               const platformLink = $(el).attr('href') || ''
               const platformClass = $(el).find('span').attr('class') || ""
@@ -313,7 +317,7 @@ async function getCompanyInformation(event:Electron.IpcMainEvent, listings: List
             const infoBlocks = additionInfoSection.find('div.gc-text--h3, ul.list-unstyled')
             let currentTitle = ''
 
-            infoBlocks.each((i, el) => {
+            infoBlocks.each((_, el) => {
               if ($(el).is('div.gc-text--h3')) {
                 currentTitle = $(el).text().trim().split(':')[0]
               } else if (currentTitle) {
