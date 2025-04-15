@@ -151,7 +151,7 @@ const electronAPI : ElectronAPI = {
   onUpdateDownloadComplete: createIpcHandler('update-download-complete'),
 
   scrapeYellowPage: (industryName, cityName, category, subCategory) => ipcRenderer.send('scrape-yellowpage',industryName, cityName, category, subCategory),
-  onScrapeYelloPageProgress: createIpcHandler('scrape-yellowpage-prgress'),
+  onScrapeYelloPageProgress: createIpcHandler('scrape-yellowpage-progress'),
   onScrapeYellowPageSuccess: createIpcHandler('scrape-yellowpage-success'),
   onScrapeYellowPageError: createIpcHandler('scrape-yellowpage-error')
 }

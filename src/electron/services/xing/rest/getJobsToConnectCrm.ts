@@ -1,7 +1,7 @@
 import Job, { IJob } from '../../../models/job.model.js';
 import { ICompany } from '../../../models/company.model.js';
 import axios, { AxiosError } from 'axios';
-import { z } from 'zod';
+
 import mongoose, { Types } from 'mongoose';
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
@@ -17,11 +17,8 @@ const EVENT_PROGRESS_URL = 'connect-xing-crm-progress';
 const EVENT_SUCCESS_URL = 'connect-xing-crm-successfull';
 const EVENT_ERROR_URL = 'connect-xing-crm-error';
 
-const envSchema = z.object({
-  WEBHOOK_URL: z.string().url()
-});
 
-const config = envSchema.parse(process.env);
+const WEBHOOK_URL = process.env.WEBHOOK_URL || ""
 
 const BATCH_SIZE = 10;
 const MAX_RETRIES = 3;
@@ -137,7 +134,7 @@ export async function processJobsToCRM(dryRun: boolean, event: Electron.IpcMainE
           } else {
             try {
               await randomWait(2000, 4000);
-              const response = await withRetry(() => axios.post(config.WEBHOOK_URL, payload));
+              const response = await withRetry(() => axios.post(WEBHOOK_URL, payload));
 
            
 
