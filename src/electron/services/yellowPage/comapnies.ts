@@ -322,7 +322,7 @@ async function getCompanyInformation(event:Electron.IpcMainEvent, listings: List
                 currentTitle = $(el).text().trim().split(':')[0]
               } else if (currentTitle) {
                 const infoItems: string[] = []
-                $(el).find('li').each((index, liEl) => {
+                $(el).find('li').each((_, liEl) => {
                   infoItems.push($(liEl).text().trim())
                 })
                 companyInfo.companyAdditionalInfo.push({
