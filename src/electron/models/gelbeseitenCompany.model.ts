@@ -11,7 +11,7 @@ interface AdditionalInfo {
   info: string[]
 }
 
-interface IGelbeseitenCompany extends Document {
+export interface IGelbeseitenCompany extends Document {
   name: string,
   gelbeseitenLink: string,
   category: string,

@@ -118,6 +118,7 @@ const CompanyTable = () => {
 				header: 'Total Jobs',
 				cell: (info) => {
 					const jobs = info.getValue() as string[]
+
 					return jobs ? jobs.length : 0
 				},
 			}),

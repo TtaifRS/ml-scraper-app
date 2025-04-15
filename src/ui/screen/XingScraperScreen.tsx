@@ -5,7 +5,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card'
-import CreateCsv from '../components/xing/CreateCsv'
+import CrmConnection from '../components/xing/CrmConnection'
 import ScraperDetails from '../components/xing/ScraperDetails'
 import JobLinkScraper from '../components/xing/jobSearch/JobLinkScraper'
 import UpdateProgres from '../components/UpdateProgressComponent'
@@ -72,10 +72,10 @@ const XingScraper = () => {
 			</Card>
 			<Card className="w-full bg-black text-white">
 				<CardHeader>
-					<CardTitle>Generate CSV File</CardTitle>
+					<CardTitle>Connect with CRM</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<CreateCsv />
+					<CrmConnection />
 				</CardContent>
 			</Card>
 

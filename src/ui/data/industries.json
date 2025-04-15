@@ -7,10 +7,7 @@
         "subCategory": "Auto, Motorrad",
         "subCategoryLink": "https://www.gelbeseiten.derubriken/1052651",
         "industries": [
-          {
-            "industry": "Abschleppdienst",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/abschleppdienst"
-          },
+         
           {
             "industry": "Autoelektrik",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/autoelektrik"
@@ -51,10 +48,7 @@
             "industry": "Autoteile",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/autoteile"
           },
-          {
-            "industry": "Autovermietung",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/autovermietung"
-          },
+         
           {
             "industry": "Autoverwertung",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/autoverwertung"
@@ -83,10 +77,7 @@
             "industry": "Gebrauchtwagen",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/gebrauchtwagen"
           },
-          {
-            "industry": "Karosseriebau",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/karosseriebau"
-          },
+         
           {
             "industry": "Kfz Gutachter",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/kfz%20gutachter"
@@ -115,10 +106,7 @@
             "industry": "Reifenhändler",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/reifenh%c3%a4ndler"
           },
-          {
-            "industry": "Sachverständiger",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/sachverst%c3%a4ndiger"
-          },
+          
           {
             "industry": "SB Waschanlage",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/sb%20waschanlage"
@@ -126,10 +114,6 @@
           {
             "industry": "Tankstelle",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/tankstelle"
-          },
-          {
-            "industry": "Zweiradmechaniker",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/zweiradmechaniker"
           }
         ]
       },
@@ -141,10 +125,7 @@
             "industry": "Abschleppdienst",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/abschleppdienst"
           },
-          {
-            "industry": "Autovermietung",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/autovermietung"
-          },
+         
           {
             "industry": "Behindertenfahrdienst",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/behindertenfahrdienst"
@@ -269,10 +250,7 @@
             "industry": "Karosseriebau",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/karosseriebau"
           },
-          {
-            "industry": "Sachverständiger",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/sachverst%c3%a4ndiger"
-          },
+         
           {
             "industry": "Zweiradmechaniker",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/zweiradmechaniker"
@@ -335,10 +313,7 @@
             "industry": "Betonwerk",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/betonwerk"
           },
-          {
-            "industry": "Dachdeckerbedarf",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/dachdeckerbedarf"
-          },
+         
           {
             "industry": "Fliesen",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/fliesen"
@@ -366,10 +341,6 @@
           {
             "industry": "Transportbeton",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/transportbeton"
-          },
-          {
-            "industry": "Zaunbau",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/zaunbau"
           }
         ]
       },
@@ -381,18 +352,12 @@
             "industry": "Dachdecker",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/dachdecker"
           },
-          {
-            "industry": "Dachdeckerbedarf",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/dachdeckerbedarf"
-          },
+        
           {
             "industry": "Dachrinnenreinigung",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/dachrinnenreinigung"
           },
-          {
-            "industry": "Sachverständiger",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/sachverst%c3%a4ndiger"
-          },
+         
           {
             "industry": "Terrassenüberdachung",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/terrassen%c3%bcberdachung"
@@ -406,15 +371,7 @@
       {
         "subCategory": "Elektrotechnik",
         "subCategoryLink": "https://www.gelbeseiten.derubriken/1053250",
-        "industries": [
-          {
-            "industry": "Autoelektrik",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/autoelektrik"
-          },
-          {
-            "industry": "Blitzschutz",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/blitzschutz"
-          },
+        "industries": [    
           {
             "industry": "Elektriker",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/elektriker"
@@ -464,10 +421,6 @@
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/elektrotechnik"
           },
           {
-            "industry": "Ingenieurbüro",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/ingenieurb%c3%bcro"
-          },
-          {
             "industry": "Kundendienst",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/kundendienst"
           },
@@ -512,15 +465,7 @@
           {
             "industry": "Lackiererei",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/lackiererei"
-          },
-          {
-            "industry": "Maler",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/maler"
-          },
-          {
-            "industry": "Sachverständiger",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/sachverst%c3%a4ndiger"
-          }
+          }     
         ]
       },
       {
@@ -610,10 +555,6 @@
           {
             "industry": "Parkettleger",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/parkettleger"
-          },
-          {
-            "industry": "Sachverständiger",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/sachverst%c3%a4ndiger"
           }
         ]
       },
@@ -648,10 +589,6 @@
           {
             "industry": "Heizungsinstallateur",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/heizungsinstallateur"
-          },
-          {
-            "industry": "Ingenieurbüro",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/ingenieurb%c3%bcro"
           },
           {
             "industry": "Kamin",
@@ -738,10 +675,6 @@
           {
             "industry": "Mietverwaltung",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/mietverwaltung"
-          },
-          {
-            "industry": "Sachverständiger",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/sachverst%c3%a4ndiger"
           }
         ]
       },
@@ -819,10 +752,7 @@
             "industry": "Rohrreinigung",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/rohrreinigung"
           },
-          {
-            "industry": "Sachverständiger",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/sachverst%c3%a4ndiger"
-          },
+          
           {
             "industry": "Sanitär Notdienst",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/sanit%c3%a4r%20notdienst"
@@ -862,16 +792,8 @@
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/aufzug"
           },
           {
-            "industry": "Blitzschutz",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/blitzschutz"
-          },
-          {
             "industry": "Brandschutz",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/brandschutz"
-          },
-          {
-            "industry": "Elektriker",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/elektriker"
           },
           {
             "industry": "Elektro Reparatur",
@@ -892,10 +814,6 @@
           {
             "industry": "Heizung & Sanitär",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/heizung%20%26%20sanit%c3%a4r"
-          },
-          {
-            "industry": "Ingenieurbüro",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/ingenieurb%c3%bcro"
           },
           {
             "industry": "Insektenschutz",
@@ -1008,10 +926,6 @@
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/aufzug"
           },
           {
-            "industry": "Ingenieurbüro",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/ingenieurb%c3%bcro"
-          },
-          {
             "industry": "Treppenbau",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/treppenbau"
           }
@@ -1021,10 +935,6 @@
         "subCategory": "Innenarchitektur",
         "subCategoryLink": "https://www.gelbeseiten.derubriken/1057986",
         "industries": [
-          {
-            "industry": "Ingenieurbüro",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/ingenieurb%c3%bcro"
-          },
           {
             "industry": "Innenarchitekt",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/innenarchitekt"
@@ -1112,10 +1022,6 @@
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/betonsanierung"
           },
           {
-            "industry": "Dachdecker",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/dachdecker"
-          },
-          {
             "industry": "Estrichleger",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/estrichleger"
           },
@@ -1138,10 +1044,6 @@
           {
             "industry": "Hochbau",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/hochbau"
-          },
-          {
-            "industry": "Ingenieurbüro",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/ingenieurb%c3%bcro"
           },
           {
             "industry": "Innenarchitekt",
@@ -1175,10 +1077,7 @@
             "industry": "Maurer",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/maurer"
           },
-          {
-            "industry": "Sachverständiger",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/sachverst%c3%a4ndiger"
-          },
+         
           {
             "industry": "Sanierung",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/sanierung"
@@ -1231,10 +1130,7 @@
             "industry": "Trockenbau",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/trockenbau"
           },
-          {
-            "industry": "Verputzer",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/verputzer"
-          },
+
           {
             "industry": "Wasserschaden",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/wasserschaden"
@@ -1430,10 +1326,6 @@
           {
             "industry": "Elektrotechnik",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/elektrotechnik"
-          },
-          {
-            "industry": "Ingenieurbüro",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/ingenieurb%c3%bcro"
           }
         ]
       },
@@ -1793,10 +1685,7 @@
             "industry": "Kfz Gutachter",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/kfz%20gutachter"
           },
-          {
-            "industry": "Sachverständiger",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/sachverst%c3%a4ndiger"
-          },
+         
           {
             "industry": "Schimmel Gutachter",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/schimmel%20gutachter"
@@ -1874,10 +1763,6 @@
           {
             "industry": "Handy Reparatur",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/handy%20reparatur"
-          },
-          {
-            "industry": "Ingenieurbüro",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/ingenieurb%c3%bcro"
           },
           {
             "industry": "Kundendienst",
@@ -4526,16 +4411,6 @@
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/zoohandlung"
           }
         ]
-      },
-      {
-        "subCategory": "Umweltschutz",
-        "subCategoryLink": "https://www.gelbeseiten.derubriken/1053447",
-        "industries": [
-          {
-            "industry": "Ingenieurbüro",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/ingenieurb%c3%bcro"
-          }
-        ]
       }
     ]
   },
@@ -4884,10 +4759,6 @@
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/metallbau"
           },
           {
-            "industry": "Sachverständiger",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/sachverst%c3%a4ndiger"
-          },
-          {
             "industry": "Schleiferei",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/schleiferei"
           },
@@ -5160,10 +5031,6 @@
         "subCategoryLink": "https://www.gelbeseiten.derubriken/1053259",
         "industries": [
           {
-            "industry": "Elektriker",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/elektriker"
-          },
-          {
             "industry": "Elektro Reparatur",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/elektro%20reparatur"
           },
@@ -5293,10 +5160,6 @@
         "subCategory": "Innenarchitektur",
         "subCategoryLink": "https://www.gelbeseiten.derubriken/1057986",
         "industries": [
-          {
-            "industry": "Ingenieurbüro",
-            "link": "https://www.gelbeseiten.de/branchenbuch/branche/ingenieurb%c3%bcro"
-          },
           {
             "industry": "Innenarchitekt",
             "link": "https://www.gelbeseiten.de/branchenbuch/branche/innenarchitekt"

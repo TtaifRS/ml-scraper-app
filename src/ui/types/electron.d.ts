@@ -28,6 +28,11 @@ declare global {
       onDownloadSuccess: (callback: (result: string) => void) => Unsubscribe
       onDownloadError: (callback: (error: string) => void) => Unsubscribe
 
+      connectXingToCRM: () => void
+      onConnectionProgress: (callback: (msg: string) => void) => Unsubscribe
+      onConnectionSucces: (callback: (result: string) => void) => Unsubscribe
+      onConnectionError: (callback: (error: string) => void) => Unsubscribe
+
       sendMultipleSearch: (searchTerms: string[]) => void
       onMultipleSearchProgress:(callback: (msg: string) => void) => Unsubscribe
       onMultipleSearchResult: (callback: (result: string) => void) => Unsubscribe
@@ -40,6 +45,11 @@ declare global {
       getCompanies: (queryParams: CompanyQueryParams) => promise<PaginatedCompaniesResult>
       getCities: () => Promise<string[]>
       getServices: () => Promise<string[]>
+
+      scrapeYellowPage: (industryName: string, cityName: string, category: string, subCategroy: string) => void
+      onScrapeYelloPageProgress: (callback: (msg: string) => void) => Unsubscribe
+      onScrapeYellowPageSuccess: (callback: (result: string) => void) => Unsubscribe
+      onScrapeYellowPageError: (callback: (error: string) => void) => Unsubscribe
 		}
 	}
 }

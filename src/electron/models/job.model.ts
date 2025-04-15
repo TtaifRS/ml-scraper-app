@@ -15,6 +15,8 @@ export interface IJob extends Document{
   salaryProvidedByCompany: boolean,
   description?: string | null,
   postingDate?: Date | null,
+  crmConnection?: boolean,
+  crmConnectionFailed?: boolean,
   createdAt: Date,
   updatedAt: Date
 }
@@ -79,6 +81,14 @@ const JobSchema = new Schema<IJob>({
   postingDate: {
     type: Date,
     required: true,
+  },
+  crmConnection: {
+    type: Boolean,
+    default: false
+  },
+  crmConnectionFailed: {
+    type: Boolean,
+ 
   }
 }, { timestamps: true })
 

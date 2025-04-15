@@ -26,6 +26,8 @@ import scrapeCompnayAndUpdateDB from './services/xing/scrape-logic/scrapeCompany
 import { ScrapeMultipleJobLinks } from './services/xing/scrape-logic/ScrapeMultipleJobLinks.js'
 
 import { getCities, getCompanies, GetCompaniesParam, getServices } from './services/xing/rest/getCompanies.js';
+import { processJobsToCRM } from './services/xing/rest/getJobsToConnectCrm.js';
+import { scrapeYellowPage } from './services/yellowPage/comapnies.js';
 
 
 const uri: string = process.env.MONGO_URI || ""
@@ -196,6 +198,8 @@ ipcMain.on('search', async(event: Electron.IpcMainEvent, searchTerm: string) => 
 })
 
 
+
+
 ipcMain.on('search-cancel', () => {
   if(currentBrowser){
     currentBrowser.close()
@@ -237,6 +241,15 @@ ipcMain.on('download-csv', async(event: Electron.IpcMainEvent) => {
 })
 
 
+ipcMain.on('connect-xing-crm', async(event: Electron.IpcMainEvent) => {
+  try{
+    await processJobsToCRM(false, event)
+  }catch(error){
+    console.error(error)
+  }
+})
+
+
 ipcMain.handle('get-companies', async(event: Electron.IpcMainInvokeEvent, queryParams: GetCompaniesParam) => {
   try{
     return await getCompanies(event, queryParams)
@@ -261,6 +274,14 @@ ipcMain.handle('get-services', async() => {
   }
 })
 
+
+ipcMain.on('search-yellowpage', async(event: Electron.IpcMainEvent, industryName: string, cityName: string = "", category: string, subCategory: string) => {
+  try{
+    await scrapeYellowPage(event, industryName, cityName, category, subCategory)
+  }catch(error){
+    console.log(error)
+  }
+})
 
 app.on('window-all-closed', () => {
  if(process.platform !== 'darwin'){
