@@ -1,4 +1,10 @@
 import { CompanyQueryParams, PaginatedCompaniesResult } from './company'
+interface ScrapePayload {
+  industryName: string,
+  cityName?: string,
+  category: string,
+  subCategory: string
+}
 
 type Unsubscribe = () => void
 
@@ -46,7 +52,7 @@ declare global {
       getCities: () => Promise<string[]>
       getServices: () => Promise<string[]>
 
-      scrapeYellowPage: (industryName: string, cityName: string, category: string, subCategroy: string) => void
+      scrapeYellowPage: (payload: ScrapePayload[]) => void
       onScrapeYelloPageProgress: (callback: (msg: string) => void) => Unsubscribe
       onScrapeYellowPageSuccess: (callback: (result: string) => void) => Unsubscribe
       onScrapeYellowPageError: (callback: (error: string) => void) => Unsubscribe

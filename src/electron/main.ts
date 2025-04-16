@@ -27,7 +27,7 @@ import { ScrapeMultipleJobLinks } from './services/xing/scrape-logic/ScrapeMulti
 
 import { getCities, getCompanies, GetCompaniesParam, getServices } from './services/xing/rest/getCompanies.js';
 import { processJobsToCRM } from './services/xing/rest/getJobsToConnectCrm.js';
-import { scrapeYellowPage } from './services/yellowPage/comapnies.js';
+import { ScrapePayload, scrapeYellowPage } from './services/yellowPage/comapnies.js';
 
 
 const uri: string = process.env.MONGO_URI || ""
@@ -275,9 +275,9 @@ ipcMain.handle('get-services', async() => {
 })
 
 
-ipcMain.on('search-yellowpage', async(event: Electron.IpcMainEvent, industryName: string, cityName: string = "", category: string, subCategory: string) => {
+ipcMain.on('scrape-yellowpage', async(event: Electron.IpcMainEvent, payLoad: ScrapePayload[]) => {
   try{
-    await scrapeYellowPage(event, industryName, cityName, category, subCategory)
+    await scrapeYellowPage(event, payLoad)
   }catch(error){
     console.log(error)
   }

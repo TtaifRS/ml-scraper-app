@@ -42,39 +42,51 @@ const IndustrySelector: React.FC<IndustrySelectorProps> = ({
 	)
 	const industries: Category[] = industriesData
 
-	const uniqueIndustriesCount = useMemo(() => {
-		const allLinks = industries.flatMap((category) =>
-			category.subCategories.flatMap((sub) =>
-				sub.industries.map((i) => i.industry)
+	const createIndustryKey = (
+		category: string,
+		subCategory: string,
+		industry: string
+	) => {
+		return `${category}|${subCategory}|${industry}`
+	}
+
+	const allIndustryKey = useMemo(() => {
+		const keys = industries.flatMap((category) =>
+			category.subCategories.flatMap((subCategory) =>
+				subCategory.industries.map((industry) =>
+					createIndustryKey(
+						category.category,
+						subCategory.subCategory,
+						industry.industry
+					)
+				)
 			)
 		)
-		return new Set(allLinks).size
+		return new Set(keys)
 	}, [industries])
 
-	const allIndustriesTitle = industries.flatMap((category) =>
-		category.subCategories.flatMap((sub) =>
-			sub.industries.map((i) => i.industry)
-		)
-	)
-
-	console.log(allIndustriesTitle.length)
-	console.log('selected Industry', selectedIndustries.size)
-
-	const isAllSeleted = selectedIndustries.size === uniqueIndustriesCount
+	const isAllSeleted = selectedIndustries.size === allIndustryKey.size
 	const isSomeSelected = selectedIndustries.size > 0 && !isAllSeleted
 
 	const handleGlobalSelectAll = (checked: boolean) => {
-		setSelectedIndustries(checked ? new Set(allIndustriesTitle) : new Set())
+		setSelectedIndustries(checked ? new Set(allIndustryKey) : new Set())
 	}
 
 	const handleCategorySelect = (category: Category, checked: boolean) => {
-		const categoryTitles = category.subCategories.flatMap((sub) =>
-			sub.industries.map((i) => i.industry)
+		const categoryKeys = category.subCategories.flatMap((subCategory) =>
+			subCategory.industries.map((industry) =>
+				createIndustryKey(
+					category.category,
+					subCategory.subCategory,
+					industry.industry
+				)
+			)
 		)
+
 		setSelectedIndustries((prev) => {
 			const next = new Set(prev)
-			categoryTitles.forEach((title) =>
-				checked ? next.add(title) : next.delete(title)
+			categoryKeys.forEach((key) =>
+				checked ? next.add(key) : next.delete(key)
 			)
 			return next
 		})
@@ -82,25 +94,38 @@ const IndustrySelector: React.FC<IndustrySelectorProps> = ({
 
 	const handleSubCategorySelect = (
 		subCategory: SubCategory,
+		category: Category,
 		checked: boolean
 	) => {
-		const subTitles = subCategory.industries.map((i) => i.industry)
+		const subCategoryKeys = subCategory.industries.map((industry) =>
+			createIndustryKey(
+				category.category,
+				subCategory.subCategory,
+				industry.industry
+			)
+		)
 		setSelectedIndustries((prev) => {
 			const next = new Set(prev)
-			subTitles.forEach((title) =>
-				checked ? next.add(title) : next.delete(title)
+			subCategoryKeys.forEach((key) =>
+				checked ? next.add(key) : next.delete(key)
 			)
 			return next
 		})
 	}
 
-	const handleIndustrySelect = (industryTitle: string) => {
+	const handleIndustrySelect = (
+		category: string,
+		subcategory: string,
+		industryTitle: string
+	) => {
+		const key = createIndustryKey(category, subcategory, industryTitle)
+
 		setSelectedIndustries((prev) => {
 			const next = new Set(prev)
-			if (next.has(industryTitle)) {
-				next.delete(industryTitle)
+			if (next.has(key)) {
+				next.delete(key)
 			} else {
-				next.add(industryTitle)
+				next.add(key)
 			}
 			return next
 		})
@@ -109,16 +134,40 @@ const IndustrySelector: React.FC<IndustrySelectorProps> = ({
 	const handleSubmit = async () => {
 		if (selectedIndustries.size === 0) {
 			alert('Please select at least on industry to scrape')
-			await startScraping()
-			return
 		}
+		const payload = Array.from(selectedIndustries).map((key) => {
+			const [category, subCategory, industryTitle] = key.split('|')
+			return {
+				industryName: industryTitle,
+				cityName: '',
+				category,
+				subCategory,
+			}
+		})
+
+		try {
+			startScraping()
+			window.electronAPI.scrapeYellowPage(payload)
+			setSelectedIndustries(new Set())
+		} catch (error) {
+			console.error('Submission failed', error)
+		}
+
+		return
 	}
 
 	return (
 		<div className="w-full mx-auto p-4 overflow-x-hidden">
 			<div className="flex flex-col gap-4">
-				<div className="flex flex-row justify-between items-center">
-					<h2 className="font-black text-lg">Select Industries</h2>
+				<div className="flex flex-row justify-between items-start mb-2">
+					<div className="flex flex-col gap-2">
+						<h2 className="font-black text-lg">
+							Select Yellow Page Industries
+						</h2>
+						<p className="font-medium text-sm">
+							You can select by category, subcategory or industry
+						</p>
+					</div>
 					{isDisabled ? (
 						<Button
 							disabled={isDisabled}
@@ -156,14 +205,29 @@ const IndustrySelector: React.FC<IndustrySelectorProps> = ({
 				className="flex flex-row flex-wrap gap-4 p-4 justify-between"
 			>
 				{industries.map((category) => {
-					const categoryTitle = category.subCategories.flatMap((sub) =>
-						sub.industries.map((i) => i.industry)
+					const isCategoryAllSelected = category.subCategories.every(
+						(subCategory) =>
+							subCategory.industries.every((industry) =>
+								selectedIndustries.has(
+									createIndustryKey(
+										category.category,
+										subCategory.subCategory,
+										industry.industry
+									)
+								)
+							)
 					)
-					const isCategroyAllSelected = categoryTitle.every((title) =>
-						selectedIndustries.has(title)
-					)
-					const isSomeCategorySelected = categoryTitle.some((title) =>
-						selectedIndustries.has(title)
+					const isCategorySomeSelected = category.subCategories.some(
+						(subCategory) =>
+							subCategory.industries.some((industry) =>
+								selectedIndustries.has(
+									createIndustryKey(
+										category.category,
+										subCategory.subCategory,
+										industry.industry
+									)
+								)
+							)
 					)
 					return (
 						<AccordionItem
@@ -173,12 +237,12 @@ const IndustrySelector: React.FC<IndustrySelectorProps> = ({
 						>
 							<div className="flex items-center">
 								<Checkbox
-									checked={isCategroyAllSelected}
+									checked={isCategoryAllSelected}
 									onCheckedChange={(checked: boolean) =>
 										handleCategorySelect(category, checked)
 									}
 									aria-checked={
-										isSomeCategorySelected
+										isCategorySomeSelected
 											? 'mixed'
 											: isAllSeleted
 											? 'true'
@@ -192,14 +256,24 @@ const IndustrySelector: React.FC<IndustrySelectorProps> = ({
 							</div>
 							<AccordionContent>
 								{category.subCategories.map((subCategory) => {
-									const subTitles = subCategory.industries.map(
-										(i) => i.industry
+									const isSubAll = subCategory.industries.every((industry) =>
+										selectedIndustries.has(
+											createIndustryKey(
+												category.category,
+												subCategory.subCategory,
+												industry.industry
+											)
+										)
 									)
-									const isSubAll = subTitles.every((title) =>
-										selectedIndustries.has(title)
-									)
-									const isSubSome = subTitles.some((title) =>
-										selectedIndustries.has(title)
+
+									const isSubSome = subCategory.industries.some((industry) =>
+										selectedIndustries.has(
+											createIndustryKey(
+												category.category,
+												subCategory.subCategory,
+												industry.industry
+											)
+										)
 									)
 									return (
 										<div key={subCategory.subCategory} className="mb-4">
@@ -207,7 +281,11 @@ const IndustrySelector: React.FC<IndustrySelectorProps> = ({
 												<Checkbox
 													checked={isSubAll}
 													onCheckedChange={(checked: boolean) =>
-														handleSubCategorySelect(subCategory, checked)
+														handleSubCategorySelect(
+															subCategory,
+															category,
+															checked
+														)
 													}
 													aria-checked={
 														isSubSome
@@ -231,17 +309,24 @@ const IndustrySelector: React.FC<IndustrySelectorProps> = ({
 											>
 												{({ index, style }) => {
 													const industry = subCategory.industries[index]
+													const industryKey = createIndustryKey(
+														category.category,
+														subCategory.subCategory,
+														industry.industry
+													)
 													return (
 														<div
 															style={style}
 															className="flex items-center pl-8 pr-4"
 														>
 															<Checkbox
-																checked={selectedIndustries.has(
-																	industry.industry
-																)}
+																checked={selectedIndustries.has(industryKey)}
 																onCheckedChange={() =>
-																	handleIndustrySelect(industry.industry)
+																	handleIndustrySelect(
+																		category.category,
+																		subCategory.subCategory,
+																		industry.industry
+																	)
 																}
 																className="data-[state=checked]:bg-slate-900"
 															/>

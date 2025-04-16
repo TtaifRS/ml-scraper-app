@@ -96,7 +96,7 @@ export async function processJobsToCRM(dryRun: boolean, event: Electron.IpcMainE
         }
       },
       {
-        $limit: 50
+        $limit: 50000
       }
     ]).exec();
 

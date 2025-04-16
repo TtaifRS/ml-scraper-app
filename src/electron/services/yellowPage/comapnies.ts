@@ -10,6 +10,8 @@ import { getCurrentime } from '../../helpers/getCurrentTime.js';
 
 
 const YELLOW_PAGE_PROGRESS_URL = "scrape-yellowpage-progress"
+const YELLOW_PAGE_SUCCESS_URL = "scrape-yellowpage-success"
+const YELLOW_PAGE_ERROR_URL = "scrape-yellowpage-error"
 
 interface Config{
   requestDelay: number,
@@ -56,7 +58,7 @@ interface CompanyInfo {
   address?: string,
   telephoneNumber?: string,
   fax?: string,
-  email?: string,
+  email?: string | null,
   website?: string,
   socialMedia: SocialMedia[],
   businessCard?: string,
@@ -66,14 +68,33 @@ interface CompanyInfo {
 }
 
 interface ScrapeResult {
+  industry: string,
+  category: string,
+  subCategory: string
   total: number,
   success: number,
-  failed:number
+  failed:number,
+  error?: string
 }
 
 interface ScrapeError extends Error {
   details?: unknown
 }
+
+export interface ScrapePayload {
+  industryName: string,
+  cityName?: string,
+  category: string,
+  subCategory: string
+}
+
+interface BulkScrapeResult {
+  total: number,
+  success: number,
+  failed: number,
+  details: ScrapeResult[]
+}
+
 
 const CONFIG: Config = {
   requestDelay: 2000,
@@ -105,7 +126,7 @@ async function retryableRequest(config: AxiosRequestConfig, retries: number = CO
   }catch(error){
     if(retries > 0){
       const delay = Math.pow(2, CONFIG.maxRetries - retries) * 1000 
-      console.log(`Retrying... (${retries} left)`)
+     
       await new Promise(resolve => setTimeout(resolve, delay))
       return retryableRequest(config, retries -1)
     }
@@ -114,11 +135,12 @@ async function retryableRequest(config: AxiosRequestConfig, retries: number = CO
 }
 
 async function getListings(event: Electron.IpcMainEvent, industryName: string, cityName: string = "", category: string, subCategory: string): Promise<Listing[]>{
+
   const limit = pLimit(CONFIG.concurrencyLimitForListing)
   const listings:Listing[] = []
   try{
     
-    event.reply(YELLOW_PAGE_PROGRESS_URL, `[${getCurrentime()} Starting search for ${industryName}]`)
+    event.reply(YELLOW_PAGE_PROGRESS_URL, `[${getCurrentime()}] Starting search for ${industryName}`)
     const initialParams = new URLSearchParams({WAS: industryName, WO: cityName})
     const initialResponse = await retryableRequest({
       method: 'POST',
@@ -130,7 +152,7 @@ async function getListings(event: Electron.IpcMainEvent, industryName: string, c
     const $ = cheerio.load(initialResponse.data)
 
     if($('div.errorpage-content').length > 0){
-      console.log('No lisiting found!')
+    
       return []
     }
 
@@ -143,8 +165,8 @@ async function getListings(event: Electron.IpcMainEvent, industryName: string, c
 
     const totalNumberText = $('#mod-TrefferlisteInfo').text().trim()
     const totalNumberOfCompany = parseInt(totalNumberText, 10)
-     console.log(`Total Number of company: ${totalNumberOfCompany}`)
-
+  
+    event.reply(YELLOW_PAGE_PROGRESS_URL, `[${getCurrentime()}] Found ${totalNumberOfCompany} listings for ${industryName}`)
     if(totalNumberOfCompany > 50){
       const ajaxRequests = []
 
@@ -175,6 +197,7 @@ async function getListings(event: Electron.IpcMainEvent, industryName: string, c
                 data: ajaxParams.toString(),
                 headers: CONFIG.headers
               })  
+             
               const $$ = cheerio.load(ajaxResponse.data.html)
               $$('article.mod.mod-Treffer').each((_, element) => {
                   const aTag = $$(element).find('a').first()
@@ -187,7 +210,10 @@ async function getListings(event: Electron.IpcMainEvent, industryName: string, c
                     subCategory, 
                     industry: industryName
                   })
+                 
                 })
+                
+                event.reply(YELLOW_PAGE_PROGRESS_URL, `[${getCurrentime()}] AJAX request completed for position: ${position}-${position + 9}`)
             }catch(error){
               console.log(error)
             }
@@ -196,6 +222,7 @@ async function getListings(event: Electron.IpcMainEvent, industryName: string, c
         )
         await Promise.all(promises)
      }
+     event.reply(YELLOW_PAGE_PROGRESS_URL, `[${getCurrentime()}] Scraped ${listings.length} listings from ${industryName}`)
      return listings
   }catch(error){
     console.log(error)
@@ -213,8 +240,8 @@ async function getCompanyInformation(event:Electron.IpcMainEvent, listings: List
       limit(async() => {
         try{
           await randomWait(CONFIG.minDelay, CONFIG.maxDelay)
-          console.log(`Processing ${index + 1}/${listings.length}: ${listing.name}`)
-
+     
+          event.reply(YELLOW_PAGE_PROGRESS_URL, `[${getCurrentime()}] Processing ${index + 1}/${listings.length}: ${listing.name}.`)
           const response = await retryableRequest({
             method: 'GET',
             url: listing.link,
@@ -235,7 +262,7 @@ async function getCompanyInformation(event:Electron.IpcMainEvent, listings: List
             address: "",
             telephoneNumber: "",
             fax: "",
-            email: "",
+            email: null,
             website: "",
             socialMedia: [],
             businessCard: "",
@@ -245,6 +272,7 @@ async function getCompanyInformation(event:Electron.IpcMainEvent, listings: List
           }
 
           companyInfo.name = listing.name
+         
           companyInfo.gelbeseitenLink = listing.link || '' 
           companyInfo.category = listing.category
           companyInfo.subCategory = listing.subCategory
@@ -278,8 +306,8 @@ async function getCompanyInformation(event:Electron.IpcMainEvent, listings: List
           companyInfo.fax = $('div.mod-Kontaktdaten__list-item.contains-icon-big-fax span').text().trim().replace(/\s/g, '') || ''
 
 
-          const emailData = $('#email_versenden').attr('data-link') || ''
-          companyInfo.email = emailData.replace(/mailto:|%20/g, '').split('?')[0]
+          const emailData = $('#email_versenden').attr('data-link') || null
+          companyInfo.email = emailData?.replace(/mailto:|%20/g, '').split('?')[0]
 
 
           companyInfo.website = $('div.mod-Kontaktdaten__list-item.contains-icon-big-homepage a').attr('href') || ''
@@ -354,41 +382,100 @@ async function getCompanyInformation(event:Electron.IpcMainEvent, listings: List
   }
 }
 
-export async function scrapeYellowPage(event: Electron.IpcMainEvent, industryName: string, cityName: string, category: string, subCategory: string ): Promise<ScrapeResult>{
-  try{
-    const listings: Listing[] = await getListings(event, industryName, cityName, category, subCategory)
-    const comapnies: CompanyInfo[] = await getCompanyInformation(event, listings)
+export async function scrapeYellowPage(
+  event: Electron.IpcMainEvent,
+  payload: ScrapePayload[]
+): Promise<BulkScrapeResult> {
 
-    const savePromises: Promise<boolean>[] = comapnies.map(async (company: CompanyInfo) => {
-     try{
-      const result = await GelbeseitenCompany.findOneAndUpdate(
-        {gelbeseitenLink: company.gelbeseitenLink},
-        company as IGelbeseitenCompany,
-        {upsert: true, new: true, runValidators: true}
-      )
-      return !!result
-     }catch(error: unknown){
-      const err = error as Error
-      console.error(`Error saving ${company.name}: ${err.message}`)
-      if(err.name === 'ValidationError'){
-        console.error('Validation Errors:', (error as unknown))
+  const results: ScrapeResult[] = []
+  let totalCompanies = 0
+  let totalSuccess = 0
+  let totalFailed = 0
+
+  try {
+    for (const { industryName, cityName = "", category, subCategory } of payload) {
+      try {
+        const listings: Listing[] = await getListings(event, industryName, cityName, category, subCategory)
+        const companies: CompanyInfo[] = await getCompanyInformation(event, listings)
+
+        const savePromises = companies.map(async (company: CompanyInfo) => {
+          try {
+            const result = await GelbeseitenCompany.findOneAndUpdate(
+              { gelbeseitenLink: company.gelbeseitenLink },
+              company as IGelbeseitenCompany,
+              { upsert: true, new: true }
+            )
+            return !!result
+          } catch (error: unknown) {
+            const err = error as Error
+            console.error(`Error saving ${company.name}: ${err.message}`)
+            if (err.name === 'ValidationError') {
+              console.error('Validation Errors:', (error as unknown))
+            }
+            return false
+          }
+        })
+
+        const saveResults = await Promise.all(savePromises)
+        const successCount = saveResults.filter(Boolean).length
+        const failedCount = companies.length - successCount
+
+        results.push({
+          industry: industryName,
+          category,
+          subCategory,
+          total: companies.length,
+          success: successCount,
+          failed: failedCount
+        })
+
+        totalCompanies += companies.length
+        totalSuccess += successCount
+        totalFailed += failedCount
+
+        event.reply(
+          YELLOW_PAGE_SUCCESS_URL,
+          `[${getCurrentime()}] Scraped ${companies.length} entries ` +
+          `(Success: ${successCount}, Failed: ${failedCount})`
+        )
+
+      } catch (error) {
+        console.error(`Failed to scrape ${industryName}: ${error}`)
+        event.reply(
+          YELLOW_PAGE_ERROR_URL,
+          `[${getCurrentime()}] Failed to scrape ${industryName}: ${error}`
+        )
+        results.push({
+          industry: industryName,
+          category,
+          subCategory,
+          total: 0,
+          success: 0,
+          failed: 0,
+          error: error instanceof Error ? error.message : 'Unknown error'
+        })
       }
-      return false
-     }
-    })
-    const result: boolean[] = await Promise.all(savePromises)
-    const sucessCount: number = result.filter(Boolean).length
-
-    return{
-      total: comapnies.length,
-      success: sucessCount,
-      failed: comapnies.length - sucessCount
     }
-  }catch(error: unknown){
-    const err: ScrapeError = new Error('Scraping Failed')
+    event.reply(
+      YELLOW_PAGE_SUCCESS_URL,
+      `[${getCurrentime()}] Scraped ${totalCompanies} entries ` +
+      `(Success: ${totalSuccess}, Failed: ${totalFailed})`
+    )
+    return {
+      total: totalCompanies,
+      success: totalSuccess,
+      failed: totalFailed,
+      details: results
+    }
+
+  } catch (error: unknown) {
+    const err: ScrapeError = new Error('Bulk scraping failed')
     err.details = error
-    console.error(`Scraping Failed: ${error}`)
+    event.reply(
+      YELLOW_PAGE_ERROR_URL,
+      `[${getCurrentime()}] Bulk scraping failed: ${error}`
+    )
+    console.error(`Bulk scraping failed: ${error}`)
     throw err
   }
 }
-

@@ -51,6 +51,13 @@ interface PaginatedCompaniesResult{
   currentPage: number
 }
 
+interface ScrapePayload {
+  industryName: string,
+  cityName?: string,
+  category: string,
+  subCategory: string
+}
+
 interface ElectronAPI {
   sendSearch: (searchTerm: string) => void,
   sendCancel: () => void,
@@ -91,7 +98,7 @@ interface ElectronAPI {
   onUpdateDownloadProgress: (callback: (progressObj: {percent: number}) => void) => Unsubscribe
   onUpdateDownloadComplete: (callback: () => void) => Unsubscribe
 
-  scrapeYellowPage: (industryName: string, cityName: string, category: string, subCategroy: string) => void
+  scrapeYellowPage: (payload: ScrapePayload[]) => void
   onScrapeYelloPageProgress: (callback: (msg: string) => void) => Unsubscribe
   onScrapeYellowPageSuccess: (callback: (result: string) => void) => Unsubscribe
   onScrapeYellowPageError: (callback: (error: string) => void) => Unsubscribe
@@ -150,7 +157,7 @@ const electronAPI : ElectronAPI = {
   onUpdateDownloadProgress: createIpcHandler('update-download-progress'),
   onUpdateDownloadComplete: createIpcHandler('update-download-complete'),
 
-  scrapeYellowPage: (industryName, cityName, category, subCategory) => ipcRenderer.send('scrape-yellowpage',industryName, cityName, category, subCategory),
+  scrapeYellowPage: (payload) => ipcRenderer.send('scrape-yellowpage', payload),
   onScrapeYelloPageProgress: createIpcHandler('scrape-yellowpage-progress'),
   onScrapeYellowPageSuccess: createIpcHandler('scrape-yellowpage-success'),
   onScrapeYellowPageError: createIpcHandler('scrape-yellowpage-error')
