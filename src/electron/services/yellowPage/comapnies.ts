@@ -435,7 +435,7 @@ export async function scrapeYellowPage(
 
         event.reply(
           YELLOW_PAGE_SUCCESS_URL,
-          `[${getCurrentime()}] Scraped ${companies.length} entries ` +
+          `[${getCurrentime()}] After removing duplicate data: ${companies.length} entries ` +
           `(Success: ${successCount}, Failed: ${failedCount})`
         )
 

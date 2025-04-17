@@ -28,6 +28,7 @@ import { ScrapeMultipleJobLinks } from './services/xing/scrape-logic/ScrapeMulti
 import { getCities, getCompanies, GetCompaniesParam, getServices } from './services/xing/rest/getCompanies.js';
 import { processJobsToCRM } from './services/xing/rest/getJobsToConnectCrm.js';
 import { ScrapePayload, scrapeYellowPage } from './services/yellowPage/comapnies.js';
+import exportYellowPageCompaniesToCSV from './services/yellowPage/exportYellowpageCompaniesToCSV.js';
 
 
 const uri: string = process.env.MONGO_URI || ""
@@ -282,6 +283,15 @@ ipcMain.on('scrape-yellowpage', async(event: Electron.IpcMainEvent, payLoad: Scr
     console.log(error)
   }
 })
+
+ipcMain.on('download-yellowpage-csv', async(event: Electron.IpcMainEvent) => {
+  try{
+    await exportYellowPageCompaniesToCSV(event)
+  }catch(error){
+    console.error(error)
+  }
+})
+
 
 app.on('window-all-closed', () => {
  if(process.platform !== 'darwin'){

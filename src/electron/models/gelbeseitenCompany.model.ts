@@ -1,12 +1,12 @@
 import { Schema, model, Document } from 'mongoose';
 
 
-interface SocialMedia{
+export interface SocialMedia{
   platform: string, 
   platformLink: string
 }
 
-interface AdditionalInfo {
+export interface AdditionalInfo {
   infoTitle: string,
   info: string[]
 }
@@ -68,6 +68,10 @@ const gelbeseitenCompanySchema = new Schema<IGelbeseitenCompany>({
   industry: {
     type: String,
     required: true
+  },
+  website: {
+    type: String,
+    required: false
   },
   industryFull: {type: String},
   logo: {type: String},

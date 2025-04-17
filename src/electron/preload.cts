@@ -102,6 +102,10 @@ interface ElectronAPI {
   onScrapeYelloPageProgress: (callback: (msg: string) => void) => Unsubscribe
   onScrapeYellowPageSuccess: (callback: (result: string) => void) => Unsubscribe
   onScrapeYellowPageError: (callback: (error: string) => void) => Unsubscribe
+
+  downloadYellowpageCsv: () => void,
+  onDownloadYellowpageSuccess: (callback: (result: string) => void) => Unsubscribe
+  onDownloadYellowpageError: (callback: (error: string) => void) => Unsubscribe
   
 }
 
@@ -160,7 +164,11 @@ const electronAPI : ElectronAPI = {
   scrapeYellowPage: (payload) => ipcRenderer.send('scrape-yellowpage', payload),
   onScrapeYelloPageProgress: createIpcHandler('scrape-yellowpage-progress'),
   onScrapeYellowPageSuccess: createIpcHandler('scrape-yellowpage-success'),
-  onScrapeYellowPageError: createIpcHandler('scrape-yellowpage-error')
+  onScrapeYellowPageError: createIpcHandler('scrape-yellowpage-error'),
+
+  downloadYellowpageCsv: () => ipcRenderer.send('download-yellowpage-csv'),
+  onDownloadYellowpageSuccess: createIpcHandler('download-yellowpage-csv-result'),
+  onDownloadYellowpageError: createIpcHandler('download-yellowpage-csv-error')
 }
 
 

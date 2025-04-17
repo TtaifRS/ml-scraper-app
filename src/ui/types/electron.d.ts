@@ -56,6 +56,10 @@ declare global {
       onScrapeYelloPageProgress: (callback: (msg: string) => void) => Unsubscribe
       onScrapeYellowPageSuccess: (callback: (result: string) => void) => Unsubscribe
       onScrapeYellowPageError: (callback: (error: string) => void) => Unsubscribe
+
+      downloadYellowpageCsv: () => void,
+      onDownloadYellowpageSuccess: (callback: (result: string) => void) => Unsubscribe,
+      onDownloadYellowpageError: (callback: (error: string) => void) => Unsubscribe
 		}
 	}
 }
